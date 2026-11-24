@@ -99,11 +99,11 @@ def _parte_estatica(caminho_png, caminho_mp4, fala, segundos):
     """PNG parado virando MP4, com narração se houver."""
     if fala:
         dur = dur_audio(fala) + 0.6
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", caminho_png, "-i", fala,
+        subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", caminho_png, "-i", fala,
                         "-filter_complex", "[1:a]apad[a]", "-map", "0:v", "-map", "[a]",
                         "-t", str(dur), "-r", "24", "-pix_fmt", "yuv420p", *AUDIO, caminho_mp4], check=True)
     else:
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", caminho_png,
+        subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", caminho_png,
                         "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", str(segundos),
                         "-r", "24", "-pix_fmt", "yuv420p", *AUDIO, "-shortest", caminho_mp4], check=True)
 
@@ -131,7 +131,7 @@ def montar(blocos, nome, cta_texto=None, progresso=lambda _: None, narrar=True, 
             dur = dur_audio(fala) + 0.6 if fala else b["segundos"]
             som = ["-i", fala] if fala else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
             # o clipe roda em loop até a fala terminar
-            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-stream_loop", "-1", "-i", clipe, "-i", png, *som,
+            subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-stream_loop", "-1", "-i", clipe, "-i", png, *som,
                             "-filter_complex", f"[0:v]scale={W}:{H}[v];[v][1:v]overlay=0:0[vo];[2:a]apad[a]",
                             "-map", "[vo]", "-map", "[a]", "-t", str(dur),
                             "-r", "24", "-pix_fmt", "yuv420p", *AUDIO, parte], check=True)
@@ -146,7 +146,7 @@ def montar(blocos, nome, cta_texto=None, progresso=lambda _: None, narrar=True, 
     with open(lista, "w") as f:
         f.writelines(f"file '{os.path.abspath(p)}'\n" for p in partes)
     final = os.path.join(SAIDA, f"{nome}.mp4")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+    subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
                     "-i", lista, "-c", "copy", final], check=True)
     return final
 
@@ -195,7 +195,7 @@ def legendar(video, blocos, nome, max_palavras=3):
         filtros.append(f"[{ant}][{g + 1}:v]overlay=0:0:enable='between(t,{a:.2f},{b:.2f})'[{saida}]")
         ant = saida
     final = video.replace(".mp4", "_leg.mp4")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video, *entradas,
+    subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-i", video, *entradas,
                     "-filter_complex", ";".join(filtros), "-map", f"[{ant}]", "-map", "0:a",
                     "-r", "24", "-pix_fmt", "yuv420p", "-c:a", "copy", final], check=True)
     for g in range(len(grupos)):

@@ -112,7 +112,7 @@ def gerar_fala(texto, voz="Kore", log=print):
         bruto = caminho + ".pcm"
         with open(bruto, "wb") as f:
             f.write(r)
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", "24000", "-ac", "1",
+        subprocess.run(["nice", "-n", "10", "ffmpeg", "-y", "-loglevel", "error", "-f", "s16le", "-ar", "24000", "-ac", "1",
                         "-i", bruto, caminho], check=True)
         os.remove(bruto)
         log(f"fala: {caminho} ({len(r)//1024} KB)")
