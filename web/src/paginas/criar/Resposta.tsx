@@ -1,6 +1,6 @@
 // A resposta do agente: storyboard da pauta (modo gerar) e/ou explicação com achados e referências (analisar, recomendar).
 import { useRef, useState, type KeyboardEvent } from "react";
-import { useGerarVideo, useVideoCriativo } from "../../api/hooks";
+import { useGerarVideo, useVideoCriativo, useVideosGerados } from "../../api/hooks";
 import type { Criativo, PostResumo, RespostaAgente } from "../../api/tipos";
 import { BarraPar, Botao, BotaoColecao, BotaoExportar, Comprovante, Etiqueta, LegendaBarraPar, Markdown, PostCard, Secao, Seg } from "../../componentes";
 import { useFoco } from "../../contexto/Foco";
@@ -76,7 +76,9 @@ function VideoCriativo({ c }: { c: Criativo }) {
   const gerar = useGerarVideo();
   const [id, setId] = useState<string | null>(null);
   const { data: job } = useVideoCriativo(id);
-  const url = job?.resultado?.url;
+  const { data: historico } = useVideosGerados();
+  // ponytail: vídeo já gerado é reconhecido pelo gancho; se um dia dois criativos repetirem o gancho, trocar pelo hash do roteiro
+  const url = job?.resultado?.url ?? historico?.find((v) => v.gancho === c.gancho)?.url;
   if (url)
     return (
       <div className="criar-video">

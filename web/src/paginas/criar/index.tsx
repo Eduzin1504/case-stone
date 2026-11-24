@@ -36,7 +36,11 @@ const PLATAFORMAS = [{ valor: "instagram", rotulo: "Instagram" }, { valor: "yout
 
 function Salvas({ modo, aoPerguntar }: { modo: ModoAgente; aoPerguntar: () => void }) {
   const { data, isLoading, error, refetch } = useAgenteSalvas();
-  const [escolhida, setEscolhida] = useState<string | null>(null);
+  const [q] = useSearchParams();
+  const [escolhida, setEscolhida] = useState<string | null>(q.get("salva"));
+  // abrir pelo histórico (?salva=id) seleciona a resposta e rola até ela
+  const salvaUrl = q.get("salva");
+  useEffect(() => { if (salvaUrl) setEscolhida(salvaUrl); }, [salvaUrl]);
   if (isLoading) return <Esqueleto tipo="linhas" n={4} />;
   if (error) return <Erro erro={error} onTentar={refetch} />;
   const lista = (data ?? []).filter((r) => r.modo === modo);
@@ -67,7 +71,15 @@ function Salvas({ modo, aoPerguntar }: { modo: ModoAgente; aoPerguntar: () => vo
 
 function VideosGerados() {
   const { data } = useVideosGerados();
+  const [q, setQ] = useSearchParams();
   if (!data?.length) return null;
+  const abrir = (id: string) => {
+    const n = new URLSearchParams(q);
+    n.set("salva", id);
+    n.delete("job");
+    setQ(n);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <section className="criar-videos" aria-label="Reels já gerados">
       <h2 className="t-h3">Reels já gerados</h2>
@@ -76,7 +88,10 @@ function VideosGerados() {
           <li key={v.url} className="criar-videos-item">
             <video src={v.url} controls playsInline preload="metadata" className="criar-video-player" />
             <p className="corta-3">{v.titulo}</p>
-            <a className="botao botao--fantasma botao--p" href={v.url} download>Baixar MP4</a>
+            <span className="linha">
+              {v.id && <Botao variante="contorno" tamanho="p" onClick={() => abrir(v.id!)}>Abrir a pauta completa</Botao>}
+              <a className="botao botao--fantasma botao--p" href={v.url} download>Baixar MP4</a>
+            </span>
           </li>
         ))}
       </ul>
@@ -92,6 +107,9 @@ export default function Criar() {
   const modoVindo = q.get("modo") as ModoAgente | null;
   const [modo, setModo] = useState<ModoAgente>(modoVindo && ["gerar_criativo", "analisar", "recomendar"].includes(modoVindo) ? modoVindo : "gerar_criativo");
   const [fonte, setFonte] = useState<"salvas" | "agora">(vinda || job ? "agora" : "salvas");
+  // abrir pelo histórico (?salva=id) sempre cai na visão de respostas salvas
+  const salvaParam = q.get("salva");
+  useEffect(() => { if (salvaParam) setFonte("salvas"); }, [salvaParam]);
   const [pergunta, setPergunta] = useState(vinda);
   const [segmento, setSegmento] = useState("");
   const [plataforma, setPlataforma] = useState("");

@@ -342,7 +342,7 @@ def criativos_videos():
 
     import render_reels
     vistos, saida = set(), []
-    for r in (dados.criativos() or []) + (dados.salvas() or []):
+    for r in (dados.salvas() or []) + (dados.criativos() or []):  # salvas primeiro: têm id para reabrir a pauta
         for c in r.get("criativos") or r.get("creatives") or []:
             if not c.get("roteiro"):
                 continue
@@ -351,7 +351,7 @@ def criativos_videos():
             if nome not in vistos and os.path.exists(arq):
                 vistos.add(nome)
                 saida.append(dict(url=f"/midia/render/{nome}.mp4", titulo=r.get("pergunta") or r.get("pedido") or c.get("gancho", "")[:80],
-                                  em=r.get("em"), gancho=c.get("gancho")))
+                                  em=r.get("em"), gancho=c.get("gancho"), id=r.get("id"), modo=r.get("modo")))
     return saida
 
 

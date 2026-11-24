@@ -140,7 +140,7 @@ export const useVideoCriativo = (id: string | null | undefined) =>
   });
 /** GET /criativos/videos: histórico dos Reels já gerados. */
 export const useVideosGerados = () =>
-  useQuery({ queryKey: ["/criativos/videos"], queryFn: () => api.get<{ url: string; titulo: string; em: string | null; gancho: string }[]>("/criativos/videos") });
+  useQuery({ queryKey: ["/criativos/videos"], queryFn: () => api.get<{ url: string; titulo: string; em: string | null; gancho: string; id: string | null; modo: string | null }[]>("/criativos/videos") });
 /** GET /agente/opcoes: segmentos e pilares aceitos como filtro. */
 export const useOpcoesAgente = () => useQuery({ queryKey: ["/agente/opcoes"], queryFn: () => api.get<T.OpcoesAgente>("/agente/opcoes"), staleTime: Infinity });
 export const useAgenteSalvas = () => useApi<T.RespostaAgente[]>("/agente/salvas");
