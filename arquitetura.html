@@ -1,0 +1,263 @@
+<title>Arquitetura Case Impulso Stone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna única de leitura (~860px), seções em sequência real do plano; cards só para opções e ideias */
+:root{
+  --bg:#f6f8f6; --surface:#ffffff; --fg:#17201b; --muted:#5b6a61; --line:#dce4de;
+  --accent:#0f7a4a; --accent-soft:#e3f2ea;
+  --ok:#1d7a3c; --warn:#a86a00; --bad:#b3362d; --ok-bg:#e4f4e8; --warn-bg:#fbf0d9; --bad-bg:#f9e3e0;
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101512; --surface:#171e1a; --fg:#e4ece6; --muted:#9aaba0; --line:#2a352f;
+  --accent:#4cc98a; --accent-soft:#183326;
+  --ok:#6fd08f; --warn:#e6b24a; --bad:#f08a80; --ok-bg:#16301f; --warn-bg:#33280f; --bad-bg:#3a1c19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101512; --surface:#171e1a; --fg:#e4ece6; --muted:#9aaba0; --line:#2a352f;
+  --accent:#4cc98a; --accent-soft:#183326;
+  --ok:#6fd08f; --warn:#e6b24a; --bad:#f08a80; --ok-bg:#16301f; --warn-bg:#33280f; --bad-bg:#3a1c19; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.1rem} h2{font-size:1.45rem} h3{font-size:1.05rem}
+p{margin:0} section{display:flex;flex-direction:column;gap:16px}
+.eyebrow{font:500 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);font-size:1.05rem;max-width:68ch}
+code,.mono{font-family:var(--mono);font-size:.85em}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.fact{border-top:2px solid var(--accent);padding-top:8px}
+.fact b{display:block;font-family:var(--display);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.fact span{color:var(--muted);font-size:.85rem}
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.diagram pre{margin:0}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.fn{font-family:var(--mono);font-size:.8rem;white-space:nowrap;color:var(--accent)}
+td.grp{font-family:var(--display);font-weight:700;background:var(--accent-soft)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.opt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.opt.rec{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt h3{font-size:.98rem}
+.opt p{font-size:.86rem;color:var(--muted)}
+.tag{align-self:flex-start;font:600 .68rem var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:99px}
+.t-ok{background:var(--ok-bg);color:var(--ok)} .t-warn{background:var(--warn-bg);color:var(--warn)} .t-bad{background:var(--bad-bg);color:var(--bad)}
+.decision{display:flex;flex-direction:column;gap:10px}
+.decision > p{font-size:.92rem}
+.ideas{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.idea{display:grid;grid-template-columns:2.2rem 1fr auto;gap:12px;padding:14px;border-bottom:1px solid var(--line);align-items:start}
+.idea:last-child{border-bottom:0}
+.idea .n{font:700 1.1rem var(--display);color:var(--accent);font-variant-numeric:tabular-nums}
+.idea p{font-size:.87rem;color:var(--muted);margin-top:4px}
+.idea .cost{font:500 .72rem var(--mono);color:var(--muted);white-space:nowrap}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.day{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.day ul{margin:0;padding-left:18px;font-size:.88rem}
+.sem{display:flex;gap:8px;flex-wrap:wrap}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:.92rem}
+.q b{font-family:var(--display)}
+.note{font-size:.82rem;color:var(--muted)}
+@media (max-width:520px){h1{font-size:1.7rem}.idea{grid-template-columns:1.8rem 1fr}.idea .cost{grid-column:2}}
+</style>
+
+<main>
+<header style="display:flex;flex-direction:column;gap:12px">
+  <span class="eyebrow">Case Stone × Inteli Academy · entrega 25/11/2026</span>
+  <h1>Arquitetura e plano de implementação</h1>
+  <p class="lead">Os materiais novos mudam o recorte: o cliente real é o <b>Impulso Stone</b> (@impulsostone), e já existe dado interno de resultado, com o Insights orgânico e o histórico de Meta Ads com CTR. A proposta usa esse dado como segunda fonte de evidência ao lado da base externa.</p>
+</header>
+
+<section>
+  <span class="eyebrow">01 · O que os materiais dizem</span>
+  <h2>Quem é o público e o que já funcionou</h2>
+  <div class="facts">
+    <div class="fact"><b>70,5% mulheres</b><span>47,5% entre 35 e 54 anos; 33,7% acima de 55</span></div>
+    <div class="fact"><b>3.692 seguidores</b><span>93,9% das views vêm de não seguidores</span></div>
+    <div class="fact"><b>Reels 52,5%</b><span>das visualizações (Stories 32,7%, posts 14,7%)</span></div>
+    <div class="fact"><b>CTR &gt; 8%</b><span>posts que convidam o empreendedor a participar</span></div>
+    <div class="fact"><b>CTR &lt; 1%</b><span>frases motivacionais genéricas e POV sem CTA</span></div>
+  </div>
+  <p class="note">Aprendizados dos Ads: identificação gera clique (nicho Beleza, Festa Junina, “Vendeu? E agora?”, Chef Ruth); reação não é clique (depoimento com 3 mil engajamentos e CTR de 0,82%). Tom de voz: próximo, acolhedor, educativo, sem jargão nem promessa exagerada. Cinco pilares: educação financeira, gestão e vendas, histórias reais, especialistas, comunidade.</p>
+</section>
+
+<section>
+  <span class="eyebrow">02 · Arquitetura</span>
+  <h2>Duas bases, uma ponte de evidência</h2>
+  <p class="lead">A base externa diz o que engaja MPEs no mercado. A base interna diz o que funcionou para o Impulso. O cruzamento das duas define o grau de confiança de cada recomendação.</p>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph EXT["Base externa: mercado"]
+    P["Descoberta de perfis<br/>parceiros, aba seguindo,<br/>busca YouTube"] --> IG["Instagram<br/>rota do kickoff"]
+    P --> YT["YouTube Shorts<br/>Data API v3"]
+  end
+  subgraph INT["Base interna: Impulso"]
+    ORG["Insights orgânico<br/>top posts 180 dias"]
+    ADS["Meta Ads<br/>~25 criativos com CTR"]
+  end
+  IG --> N["Normalizar<br/>schema Post único"]
+  YT --> N
+  ORG --> N
+  ADS --> N
+  N --> R["Ranking<br/>ER + outlier + top 10%"]
+  R --> M["Mídia<br/>thumb, frames, transcrição"]
+  M --> C["Rubrica VLM<br/>JSON + Pydantic"]
+  C --> V["Validação<br/>50 manuais, kappa"]
+  C --> A["Análise<br/>lift + perfis"]
+  A --> X["Cruzamento<br/>mercado x casa"]
+  X --> AG["Agente LangGraph"]
+  AG --> OUT["Playbook + criativos<br/>+ avaliador"]
+  AG --> MCP["Função Python<br/>+ servidor MCP"]
+  </pre></div>
+  <div class="sem">
+    <span class="tag t-ok">Confirmado: mercado e casa concordam</span>
+    <span class="tag t-warn">Só mercado: testar antes de escalar</span>
+    <span class="tag t-bad">Contradito: a casa mostra o oposto</span>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">03 · Decisões</span>
+  <h2>Opções por etapa</h2>
+
+  <div class="decision">
+    <h3>Coleta do Instagram</h3>
+    <div class="opts">
+      <div class="opt"><span class="tag t-ok">oficial, grátis</span><h3>Business Discovery API</h3><p>Lê contas profissionais por username. Exige app da Meta e a conta que travou no cadastro. Arriscado para 3 dias.</p></div>
+      <div class="opt rec"><span class="tag t-warn">grátis, depende do kickoff</span><h3>Instaloader sem login ou crédito grátis da Apify</h3><p>Rotas citadas na aula. Entregam legenda, data, curtidas, comentários e seguidores. Violam os Termos em algum grau; só use se o kickoff autorizou.</p></div>
+      <div class="opt"><span class="tag t-ok">sem risco</span><h3>Amostra manual</h3><p>De 100 a 200 posts de uns 15 perfis anotados em planilha. Lento, mas serve como validação do padrão do YouTube.</p></div>
+    </div>
+    <p>Recomendação: <b>YouTube Data API para volume</b> e a rota de Instagram liberada no kickoff para os 30+ perfis. Se nenhuma foi liberada, faça a amostra manual.</p>
+  </div>
+
+  <div class="decision">
+    <h3>Modelo de categorização</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag t-ok">recomendado</span><h3>Gemini Flash-Lite (plano grátis)</h3><p>Vídeo do YouTube direto pela URL, vídeo do Instagram pela Files API. Saída JSON com schema.</p></div>
+      <div class="opt"><span class="tag t-warn">reserva</span><h3>OpenRouter, modelos free</h3><p>Qwen VL com imagem, para quando o Gemini der 429. Só thumbnail e frames, sem áudio.</p></div>
+      <div class="opt"><span class="tag t-warn">plano B local</span><h3>Qwen2.5-VL + faster-whisper</h3><p>Sem limite de requisição, porém lento sem GPU. Útil para a transcrição dos Reels.</p></div>
+    </div>
+  </div>
+
+  <div class="decision">
+    <h3>Desenho do agente</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag t-ok">recomendado</span><h3>Grafo fixo com roteador</h3><p>Nós determinísticos para buscar dados e o LLM só para redigir. Rastreável e previsível na demo.</p></div>
+      <div class="opt"><span class="tag t-warn">alternativa</span><h3>Agente ReAct com tools</h3><p>O LLM escolhe as ferramentas. Parece mais “agêntico”, mas erra a ordem e é mais difícil de explicar à banca.</p></div>
+    </div>
+  </div>
+
+  <div class="decision">
+    <h3>Base e demonstração</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag t-ok">recomendado</span><h3>SQLite + demo via MCP</h3><p>Um arquivo só. Na apresentação, você faz perguntas ao agente ao vivo pelo Claude Desktop conectado ao MCP.</p></div>
+      <div class="opt"><span class="tag t-warn">se sobrar tempo</span><h3>Streamlit</h3><p>Painel com filtros por setor, formato e tema, citado na aula como “forma de ir além”.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">04 · Agente</span>
+  <h2>Fluxo do LangGraph</h2>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  E["Entrada<br/>mode, query,<br/>segment, filters"] --> RT{"roteador"}
+  RT -->|analisar / recomendar| Q["consultar_base"]
+  RT -->|gerar_criativo| B["buscar_referencias"]
+  RT -->|avaliar_criativo| AV["avaliar_rascunho"]
+  Q --> W["redigir (LLM)"]
+  B --> W
+  AV --> W
+  W --> CK{"checar<br/>referências válidas<br/>tom Impulso, CTA,<br/>não genérico"}
+  CK -->|falhou, até 2x| W
+  CK -->|ok| S["Saída Pydantic<br/>+ log JSONL"]
+  </pre></div>
+</section>
+
+<section>
+  <span class="eyebrow">05 · Funções</span>
+  <h2>Módulos e assinaturas</h2>
+  <div class="wrap"><table>
+    <thead><tr><th>Função</th><th>O que faz</th><th>API / lib</th></tr></thead>
+    <tbody>
+      <tr><td class="grp" colspan="3">coleta</td></tr>
+      <tr><td class="fn">descobrir_perfis(seeds, keywords)</td><td>Junta os 5 parceiros do relatório, a aba seguindo e a busca do YouTube; classifica o porte como micro, médio ou grande</td><td>YouTube search.list</td></tr>
+      <tr><td class="fn">coletar_youtube(canal)</td><td>Playlist de Shorts → métricas, duração e thumbnail</td><td>YouTube Data API v3</td></tr>
+      <tr><td class="fn">coletar_instagram(perfil)</td><td>Posts, legenda, tipo de mídia, curtidas, comentários e seguidores</td><td>rota do kickoff</td></tr>
+      <tr><td class="fn">importar_impulso()</td><td>Lê o CSV dos top posts orgânicos e dos criativos de Ads, com CTR e rótulo alto ou baixo</td><td>pandas</td></tr>
+      <tr><td class="grp" colspan="3">base e ranking</td></tr>
+      <tr><td class="fn">normalizar(raw) → Post</td><td>Schema único para as duas plataformas, com origem, faixa e data da coleta</td><td>Pydantic, SQLite</td></tr>
+      <tr><td class="fn">engajamento(df)</td><td>ER = (curtidas + comentários) ÷ seguidores; outlier = ER ÷ mediana do perfil; taxa de conversa = comentários ÷ curtidas</td><td>pandas</td></tr>
+      <tr><td class="fn">marcar_top(df, p=0.9)</td><td>Top 10% e amostra de controle do mesmo tamanho</td><td>numpy</td></tr>
+      <tr><td class="grp" colspan="3">multimodal</td></tr>
+      <tr><td class="fn">extrair_midia(post)</td><td>Thumbnail, 3 frames e transcrição dos primeiros 10 segundos</td><td>ffmpeg, faster-whisper</td></tr>
+      <tr><td class="fn">categorizar(post) → Rubrica</td><td>Rubrica do TAPI + 3 campos calibrados pelos Ads; cache e backoff</td><td>Gemini → OpenRouter → local</td></tr>
+      <tr><td class="fn">validar(amostra=50)</td><td>Concordância e kappa por campo</td><td>pandas</td></tr>
+      <tr><td class="grp" colspan="3">análise</td></tr>
+      <tr><td class="fn">lift(campo)</td><td>Frequência no top ÷ frequência no controle</td><td>pandas</td></tr>
+      <tr><td class="fn">perfis_destaque()</td><td>Criadores mais presentes no top, com tema e formato predominantes</td><td>pandas</td></tr>
+      <tr><td class="fn">cruzar_interno()</td><td>Classifica cada padrão como confirmado, só mercado ou contradito</td><td>pandas</td></tr>
+      <tr><td class="fn">intencao_comentarios()</td><td>“quero”, “como faço”, “qual o link” como indicador de lead (nível 3)</td><td>regex + LLM</td></tr>
+      <tr><td class="grp" colspan="3">agente e integração</td></tr>
+      <tr><td class="fn">consultar_base(filtros)</td><td>SQL com recorte por tema, formato, pilar, segmento e porte</td><td>SQLite</td></tr>
+      <tr><td class="fn">buscar_referencias(query, n)</td><td>Top posts mais parecidos com o pedido</td><td>palavras-chave ou embeddings</td></tr>
+      <tr><td class="fn">gerar_criativo(brief)</td><td>Gancho, roteiro, legenda e CTA com <code>inspirado_em</code> obrigatório</td><td>Gemini</td></tr>
+      <tr><td class="fn">avaliar_rascunho(texto)</td><td>Aplica a rubrica ao rascunho e compara com o top e com os piores Ads</td><td>Gemini</td></tr>
+      <tr><td class="fn">run(mode, query, segment, filters)</td><td>Ponto de entrada único, exposto como tool MCP</td><td>LangGraph, MCP SDK</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="eyebrow">06 · APIs</span>
+  <h2>Chaves e limites</h2>
+  <div class="wrap"><table>
+    <thead><tr><th>API</th><th>Custo</th><th>Limite relevante</th><th>Onde pegar</th></tr></thead>
+    <tbody>
+      <tr><td>YouTube Data API v3</td><td>grátis</td><td>10 mil unidades/dia; busca custa 100, listas custam 1</td><td class="mono">console.cloud.google.com</td></tr>
+      <tr><td>Gemini API</td><td>grátis</td><td>Requisições por minuto e por dia; cota diária de vídeo do YouTube</td><td class="mono">aistudio.google.com/apikey</td></tr>
+      <tr><td>OpenRouter</td><td>modelos :free</td><td>Limite diário baixo sem crédito</td><td class="mono">openrouter.ai/keys</td></tr>
+      <tr><td>Apify (se autorizado)</td><td>crédito grátis mensal</td><td>Acaba rápido; cobre poucos milhares de posts</td><td class="mono">console.apify.com</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Os limites dos planos gratuitos mudam sem aviso. Confira os valores atuais em cada painel antes de rodar.</p>
+</section>
+
+<section>
+  <span class="eyebrow">07 · Diferenciação</span>
+  <h2>Ideias, da maior para a menor relação valor/custo</h2>
+  <div class="ideas">
+    <div class="idea"><span class="n">1</span><div><h3>Evidência dupla: mercado × casa</h3><p>Cada padrão do playbook recebe o selo confirmado, só mercado ou contradito, usando os Ads e o orgânico do Impulso. Ninguém mais vai ter isso, porque o dado interno veio só para vocês.</p></div><span class="cost">~1h</span></div>
+    <div class="idea"><span class="n">2</span><div><h3>Rubrica calibrada pelos Ads</h3><p>Três campos novos vindos do que o CTR mostrou: <code>convite_participacao</code>, <code>gatilho_identificacao</code> (nicho, data, dor ou pessoa real) e <code>generico_0a10</code>.</p></div><span class="cost">~30min</span></div>
+    <div class="idea"><span class="n">3</span><div><h3>Avaliador de rascunho</h3><p>A equipe cola um post e recebe uma nota e o post mais parecido entre os top e entre os piores Ads, por exemplo: “parece com ‘Vender mais não é sorte’, CTR 0,77%”.</p></div><span class="cost">~2h</span></div>
+    <div class="idea"><span class="n">4</span><div><h3>Checagem de tom de voz e pilares</h3><p>O nó de checagem rejeita criativo com jargão ou promessa exagerada. O playbook é organizado pelos 5 pilares editoriais do Impulso.</p></div><span class="cost">~1h</span></div>
+    <div class="idea"><span class="n">5</span><div><h3>Criativos para o calendário de agora</h3><p>A Festa Junina teve CTR de 8,4%. Entregar criativos de Natal e fim de ano em 25/11 dá aplicação imediata.</p></div><span class="cost">~30min</span></div>
+    <div class="idea"><span class="n">6</span><div><h3>Taxa de conversa como proxy de lead</h3><p>Comentários ÷ curtidas. O melhor post orgânico teve 113 comentários e 39 curtidas: conversa, não só reação.</p></div><span class="cost">~15min</span></div>
+    <div class="idea"><span class="n">7</span><div><h3>Plano de teste piloto em Ads</h3><p>O Impulso já roda Meta Ads. Proponha um teste de 2 criativos gerados contra 1 controle, medido por CTR, para fechar o ciclo.</p></div><span class="cost">só proposta</span></div>
+    <div class="idea"><span class="n">8</span><div><h3>Playbook do lojista</h3><p>Versão educativa para a empreendedora usar no próprio Instagram, alinhada à missão do Impulso.</p></div><span class="cost">~1h</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">08 · Plano</span>
+  <h2>Três dias até a entrega</h2>
+  <div class="days">
+    <div class="day"><h3>Dom 22/11</h3><ul><li>Decidir a rota do Instagram</li><li>CSV da base interna (Ads + orgânico)</li><li>Lista de 30+ perfis com origem e faixa</li><li>Coleta YouTube e Instagram, ranking</li></ul></div>
+    <div class="day"><h3>Seg 23/11</h3><ul><li>Categorização rodando durante o dia</li><li>Validação manual de 50 posts</li><li>Lift, perfis em destaque, cruzamento</li></ul></div>
+    <div class="day"><h3>Ter 24/11</h3><ul><li>Agente + MCP</li><li>Playbook + 5 criativos</li><li>README, slides e ensaio da demo</li></ul></div>
+  </div>
+  <p class="note">Se faltar tempo, corte nesta ordem: Streamlit, fallback local, intenção nos comentários, embeddings. O código arquivado em <code>_arquivo/case_v0</code> já cobre a coleta do YouTube, o ranking, a rubrica e o agente, e economiza perto de um dia se for reaproveitado.</p>
+</section>
+
+<section>
+  <span class="eyebrow">09 · Para você decidir</span>
+  <h2>Perguntas em aberto</h2>
+  <div class="q"><b>Rota do Instagram.</b> O que foi liberado no kickoff: Instaloader, Apify, HikerAPI ou nenhuma?</div>
+  <div class="q"><b>Dados internos.</b> O relatório e o histórico de Ads podem aparecer no playbook e na apresentação, ou só como apoio interno?</div>
+  <div class="q"><b>Foco do lead.</b> Inscrição no programa Impulso (social) ou cliente da Stone (maquininha)? Os materiais apontam para o Impulso.</div>
+  <div class="q"><b>Reaproveitar a v0.</b> Partir do código arquivado ou reescrever do zero com esta arquitetura?</div>
+</section>
+</main>

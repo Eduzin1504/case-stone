@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 1 · Case Stone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBFCFA; --bg2:#EEF6F1; --ink:#1F2A24; --dk:#003D1C; --dk2:#0B5A30;
+  --ac:#00A868; --act:#007A4B; --mute:#55625B; --line:#DCE8E1; --card:#F3F8F5;
+  --tint:#DFF3E8; --onDk:#F2FAF5; --onDkMute:#B9D8C6; --acLight:#5EE0A6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#E3ECE6;font-family:'DM Sans',Arial,sans-serif;color:var(--ink);overflow:hidden}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:1920px;height:1080px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:var(--bg);padding:116px 128px 156px;display:flex;flex-direction:column;gap:44px;overflow:hidden;
+  opacity:0;visibility:hidden;transition:opacity .35s ease}
+.slide.active{opacity:1;visibility:visible}
+.slide.alt{background:var(--bg2)}
+.slide.dark{background:var(--dk);color:var(--onDk)}
+.slide.dark h2,.slide.dark h1{color:var(--onDk)}
+.slide.dark .eyebrow{color:var(--acLight)}
+.slide.dark .lead{color:var(--onDkMute)}
+
+h1{font-size:96px;line-height:1.02;letter-spacing:-2.5px;color:var(--dk);margin:0;font-weight:800}
+h2{font-size:72px;line-height:1.08;letter-spacing:-1.5px;color:var(--dk);margin:0;font-weight:750}
+h3{font-size:34px;line-height:1.2;color:var(--dk);margin:0;font-weight:700}
+p{margin:0}
+.head{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:24px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--act)}
+.lead{font-size:34px;line-height:1.45;color:var(--mute);max-width:1400px}
+.body{font-size:28px;line-height:1.45;color:var(--mute)}
+.small{font-size:24px;line-height:1.45;color:var(--mute)}
+.mono{font-family:'DM Mono',monospace}
+.grow{flex:1}
+.row{display:flex;gap:24px}
+.col{display:flex;flex-direction:column;gap:24px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:36px;display:flex;flex-direction:column;gap:14px}
+.alt .card{background:var(--bg)}
+.card p{font-size:26px;line-height:1.45;color:var(--mute)}
+.card.dk{background:var(--dk);border-color:var(--dk)}
+.card.dk h3{color:var(--onDk)} .card.dk p{color:var(--onDkMute)}
+.num{font-size:44px;font-weight:800;color:var(--ac);line-height:1}
+.badge{width:64px;height:64px;border-radius:18px;background:var(--tint);color:var(--dk);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;flex:none}
+.pill{display:inline-flex;align-items:center;padding:10px 22px;border-radius:999px;background:var(--tint);color:var(--dk);font-size:24px;font-weight:600;white-space:nowrap}
+.pill.out{background:transparent;border:2px solid var(--line);color:var(--mute)}
+.pills{display:flex;flex-wrap:wrap;gap:12px}
+.callout{border-left:8px solid var(--ac);background:var(--tint);border-radius:0 20px 20px 0;padding:28px 36px;font-size:32px;line-height:1.4;color:var(--dk);font-weight:600}
+.warn{border-left:8px solid #C77700;background:#FFF4E0;border-radius:0 20px 20px 0;padding:22px 32px;font-size:25px;line-height:1.45;color:#5A3A00}
+.big,.card p.big,.card.dk p.big{font-size:150px;font-weight:800;letter-spacing:-5px;line-height:1;color:var(--dk)}
+ul.clean{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+ul.clean li{font-size:28px;line-height:1.4;color:var(--ink);padding-left:44px;position:relative}
+ul.clean li::before{content:"";position:absolute;left:4px;top:13px;width:18px;height:18px;border-radius:6px;background:var(--ac)}
+ul.clean.x li::before{background:transparent;border:3px solid #B5C4BB;border-radius:50%}
+ul.clean.ok li::before{content:"✓";background:none;color:var(--ac);font-weight:800;top:0;font-size:30px;width:auto;height:auto}
+
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:24px;line-height:1.4}
+th{text-align:left;font-size:22px;letter-spacing:1.5px;text-transform:uppercase;color:var(--act);padding:16px 22px;border-bottom:2px solid var(--dk)}
+td{padding:18px 22px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+td:first-child{font-weight:700;color:var(--dk)}
+tr.muted td{color:#8A968F}
+tr.muted td:first-child{color:#8A968F}
+
+/* flow */
+.flow{display:flex;align-items:stretch}
+.node{flex:1 1 0;min-width:0;background:var(--bg);border:2px solid var(--line);border-radius:22px;padding:26px 22px;display:flex;flex-direction:column;gap:10px}
+.node .step{font-size:22px;font-weight:700;color:var(--act);letter-spacing:1px}
+.node h3{font-size:29px}
+.node p{font-size:22px;line-height:1.4;color:var(--mute)}
+.node.hl{background:var(--dk);border-color:var(--dk)} .node.hl h3{color:var(--onDk)} .node.hl p{color:var(--onDkMute)} .node.hl .step{color:var(--acLight)}
+.arrow{width:46px;display:flex;align-items:center;justify-content:center;color:var(--ac);font-size:38px;font-weight:800;flex:none}
+
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.tl .wk{padding:0 20px 0 0;display:flex;flex-direction:column;gap:12px}
+.tl .bar{height:10px;background:var(--ac);border-radius:5px;margin-right:8px}
+.tl .wk:last-child .bar{background:var(--dk)}
+.tl .d{font-size:22px;font-weight:700;color:var(--act);letter-spacing:1px}
+.tl h3{font-size:30px}
+.tl p{font-size:23px;line-height:1.4;color:var(--mute)}
+
+.divider{background:linear-gradient(135deg,#003D1C 0%,#0B5A30 100%);justify-content:center;gap:28px}
+.divider .dn{font-size:220px;font-weight:800;line-height:.9;letter-spacing:-8px;color:var(--acLight)}
+.divider .dt{font-size:120px;font-weight:800;line-height:1;letter-spacing:-3px;color:var(--onDk)}
+.divider .dq{font-size:38px;line-height:1.35;color:var(--onDkMute);max-width:1300px}
+.divider .track{display:flex;gap:10px;margin-top:36px}
+.divider .track span{width:64px;height:8px;border-radius:4px;background:#2F6B48}
+.divider .track span.on{background:var(--acLight)}
+.divider .track span.done{background:#5E9C78}
+.divider .ring{position:absolute;right:-180px;top:-120px;width:820px;height:820px;border-radius:50%;border:80px solid rgba(94,224,166,.08)}
+.tcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:10px}
+.chip{display:block;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 14px;font-size:23px;line-height:1.25;color:var(--dk);font-weight:600}
+/* footer */
+.foot{position:absolute;left:128px;right:128px;bottom:52px;height:44px;display:flex;align-items:center;gap:22px}
+.foot img.st{height:30px}
+.foot img.ia{height:32px}
+.foot .sep{width:2px;height:30px;background:#C9D9CF}
+.foot .pg{margin-left:auto;font-size:22px;color:#7D8A83;font-variant-numeric:tabular-nums}
+.foot .tag{font-size:22px;color:#7D8A83}
+.dark .foot img{filter:brightness(0) invert(1);opacity:.9}
+.dark .foot .sep{background:#2F6B48}
+.dark .foot .pg,.dark .foot .tag{color:var(--onDkMute)}
+
+/* UI */
+#progress{position:fixed;left:0;bottom:0;height:5px;background:var(--ac);transition:width .3s ease;z-index:5}
+#hint{position:fixed;right:18px;bottom:14px;font-size:13px;color:#6E7C74;z-index:5;opacity:.8}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{overflow:visible;height:auto;background:#fff}
+  #stage{position:static;display:block}
+  #deck{transform:none!important;width:1920px;height:auto}
+  .slide{position:relative;opacity:1;visibility:visible;height:1080px;page-break-after:always;break-after:page}
+  #progress,#hint{display:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- 1 CAPA -->
+<section class="slide" style="padding:116px 128px 116px;flex-direction:row;gap:72px">
+  <div class="col" style="flex:1;justify-content:space-between;gap:40px">
+    <div class="row" style="align-items:center;gap:28px">
+      <img src="data:image/png;base64,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" alt="Stone" style="height:60px">
+      <div style="width:2px;height:56px;background:#C9D9CF"></div>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAa0AAAF6CAYAAACqbQegAAAZTUlEQVR4Xu3d35Edx3UH4KGLAewj32y+8RGKAHYEgCKQFQHhCGRHYCACCREIiEBkBEIGdAjMQK6z5EpLCsDe3fubme4+31elKj2Ql7sXg/n1n3O6v7j56psNPuM/t237o2+orS8W+M3/tG3b7xb4Pdi27V98C8DCbrZte77w79eO0AJW9nLbtn9b+RfsRmgBK/vDyr9cR0ILWNW/m2WtR2gBq6oiIhYjtIAV1T6WisEFCS1gRf+94i+FkndgTcrcF2WmBaym9rKUuS9KaAGrsZe1MKEFrOTZtt2WurMooQWs5NVKvwz/TGgBq1Dm3oDQAlZhWbABoQWswjmDDQgtYAXK3JsQWsAKlLk3IbSA2VUBhv2sJoQWMDvnDDYitICZ1Szrxcy/AI8jtICZ1bLgzcy/AI8jtICZKXNvRmgBs6pZltPcmxFawKyqN4tmhBYwI+cMNiW0gBkpc29KaAEzej7jD831hBYwG+cMNia0gNl8O9sPTI7QAmZSZe7PZvqByRJawEyUuTcntIBZKHNHaAHTeDnNT8puzLSAWSjAQGgBU1Dmzi0zLWAGv5vhh2R/QgsYXRVgVKk7CC1geM4Z5O/MtICRKXPnF4QWMDLLgggtYBp/mOYn5RBmWsCoapZVy4Pwd0ILGNWrUX8wziO0gBHVDOvFiD8Y5xJawIiUufNRQgsY0fMRfyjO9+X5PwKD+3Hbtu8DP+O/2lSPSvyZjMo5g3zSFzdffePr4Qg/CK2YP23b9vvYp43Hs8InWR7kCEbOWW+zHzcUZe58ltDiCBpEcz5s2/Zd7uOGUwMcMNPiNEbOWW+yHzcU5wzyIDMt9qZBNOf/tu12P2tVZlk8SGixJw2iWf+T/bjhuOiRBwkt9qRBNKdmWavvZTlnkAcJLfZifyKrAquCa1VmWVxEaLEXL6GslZcGa4Dj3iwuIrTYi031nCq+WHmWZRmZiwkt9qCZOEuZO/xMaLEHzcQ5dcZgNRSvyrIgjyK0SHvpjMGolfuyigEOjyK0SPs2/YGNrd5MbIDDowktklSBZa1cMVgMcHg0oUWSKrCc1WdZBjg8idAiRTNx1sqnXxQDHJ5EaJHiJZS18tLgzbZtz7NfF10ILVK8hHJWbyZWgMGTCS0SNBNnrTzLKsrceTKhRYKXUE41E698ZJNLQbmK0OJaZllZr7MfNxxnUnIVocW1nOaeUzOsd7mPG44KU64mtLjGM1dKRK2+l6WZmKsJLa7x6pp/mV9YvZm4VNUgXEVo8VSWerLeZj9uOPY+iRBaPJVm4qzVT3O390mE0OIpapalmThn9WZie5/ECC2eQq9N1uoFGPY+iRFaPIVm4pz3izcT2/skSmjxWDbUs1ZvJq5ZOcR8cfPVN7EPo4W/btvtHgXXqzL3r6//mKH9sG23sy2IMNPiMWrULLByVt/LMisnTmjxGM6Ny+nQTKzMnTihxaVsqGetPsuq58V+FnFCi0tpJs76Lvtxw/G8sAuhxSXMsrJWbya+2bbtRfYrg58ILS5hmSdr9aXBOhi3ggvihBaX0Eycs/osq3he2I3Q4iHKlrNWP83dEV/sSmjxEKPmnA/btnwBhrYIdiW0+Byj5qw32Y8bjoIddie0+Bync+d0aCZW5s7uhBafUqNmZcs5q1cMFnessTuhxacYNefULGv1ZmIFOxxCaPEx9iayKrAquFb27cq/HOMQWnyMg06zVl8adPo/hxFafIyy5ZwOzcSeFw4jtPg1exNZytwhSGjxa5qJc77fttuG4pU5l5JDCS3uq4NOXY2eU0uDqzPI4VBCi/tUgOV0aCa2lMzhhBZ33DSbtXrFYFFlyuGEFnc0E+d0mGUZ5HAKoUXRTJy1+ukXxSCHUwgtvIDyVl8adC4lpxFaFAed5nRoJq4y95vcVwaXE1qoAMtafZZVlLlzGqGFF1BONROvfjCui0E5ldDqzSwr63X244bkYlBOJbR602eTUzOsd7mPG5ICDE4ntPp6tm3OjQvqsJelzJ3TCa2+LPPkdGgmLqpMOZ3Q6kkzcdbb7McNyf4nQxBaPVnmyXKaOxxEaPVTsyzLPDldmoldWcMQhFY/+myyOhRg1NIgOT/mPqofodWPZuKc9w2aie1/5nU4UHk3QqsXm+lZHZqJ6zZrst5kP64XodWLm4lzqsy9w4jZM5PVYQ90V0Krj9rLqoZiMrrsZSnAyOrQHrErodWHzfScLs3EjvnK6jI735XQ6sFmelaHWVY9MzU7J6fDc7M7odWDZuKsDntZnpmsLrPz3Qmt9ZllZXXYSPfM5HUY6BxCaK3PEk9WhyUez0xeh+fmEEJrfZqJczrMsopnJqvLc3MIobU2zcRZHcqVq5lYmXtWh+fmMEJrbUbMOR+aNBNrjchS5h4mtNblYNysDkfv1AzrRfZra89eVpjQWpebiXO6lCsrc8/q8twcSmityYg5q8to2T1rWcrcdyC01mTEnNNlT0LRTl6Xwc6hhNZ6NIZm1Wi5gmt1inaylLnvRGitxyGnWR1Gy4p28pS570RorUfJck6X0bJnJqvLkvIphNZa7EtkdSlzNzvP6jA7P43QWot9iZzvt+22oXh1bibOUua+M6G1DsfvZNXSYAf13JCjzH1nQmsdRsw5XUbLlpPzLA3uTGitwS2zWV1ePPaysroU7pxKaK1BM3FOl1nWs21zb1aYMvcDCK35aSbO6rIn4WzKLGXuBxFa8zPLyuqwNGigk9fhuRmC0JqfQ05zuuxJ1AkY5HRZUh6C0Jqb6q+sLqNl/XxZXZaUhyC05ublk1PNxB0OxtXPl9dlsDMEoTUvs6ys19mPG5Z+vqz3TQY7wxBa89Jjk1MzrHe5jxuWfr68LoOdYQitOemxyeqyvKPSNEuZ+wmE1pz02OR0qfy62TaVpmFdBjtDEVrz0WOT1eUUAwUYWV2WlIcjtOZjiSery2nuKk2zqsz9x+xHcgmhNZeaZWkmzunUTFzPDjmWBk8itOZSJxl4+eR0efFUewQ5ytxPJLTmYoknp8uLxx5onjL3EwmteWgmzury4rEHmqXM/WRCax5OMsjp9OKxB5rVZUl5WEJrDrWXVQ3FZHR58ZidZylzH4DQmoON9JwuzcTF7DxLmfsAhNb4bKRndZll1czc7Dyry7MzNKE1PhvpWV3uPnLUV1aXq2uGJ7TGZpaV1aWZ2HOT16XadHhCa2yuRc/qsrzjuclSgDEQoTU2zcQ5XWZZxXOT1WWwMwWhNS7lylldTnP33GTVobhd9kGnILTGZbSc86HRi8eN1ll1o3UtDzIIoTUmB+Nmvcl+3LCqAMN+VpalwcEIrTEpV87p1EysPSJLmfuAhNZ4arT8Yrwfa1pdRsqemzxl7gMSWuMxWs7pdDBuLQve5L669pS5D0pojUVTaFZVfXXZRFe4k9Vlhj4doTUWlV9ZXV48CneylLkPTGiNxWnuOZ2aiT03WcrcBya0xqEpNKtTmbsZelaXGfqUhNY47EnkVKlyNRR3oHAnS5n74ITWGF5u220RBhm1NNjF8y6/6EE6PTtTElpjcMNsTqdmYkvKWZ2enWkJrfM5eier036EwU5Wp2dnWkLrfPYkcjqNlKvM/Vnuq6PRocpTE1rn0kyc1ekKCWXuWZ1aJKYmtM5llpXVZXnHYCevy7MzPaF1LpVfOZ1GylVtSo4y94kIrfOo/MrqNFJWgJGlzH0iQus8molzOo2UDXayOhXvLEFoncOLJ6vTvUeObMrqNENfgtA6hxdPTqd7j/T05XWqOF2C0Dpe9dZUjw0ZnUbKqk2zOhXvLENoHe/V8f/JZXXaj1DmntdpwLMMoXUsL56st9mPG5rZeVan4p2lCK1jWd7J6lSqrNo0q9OzsxShdZyaZWkmzum0H1GzLFfX5HRaVl6O0DqOF09Wp/0I+6BZnZ6d5Qit41jeyXm/bbej5Q5qhvWiwy96IGXuExNax9BMnNWpmdg+aFanZeUlCa1jOCsup2ZYnUbK9kGzLA1OTmjtz2V9WZ1eOmboWcrcFyC09ueyvpxuVV/2QbOUuS9AaO1LM3FWp1mWatOsbgOeZQmtfdlEz+q0l2WGntVpwLM0obUfs6ysTlVfnp28TgOepQmt/TgrLqvTSFm1aVanAc/yhNZ+bKLndHvpvMx9dWxbqwHP8oTWPpQqZ3U6zd2zk6XMfTFCax9mWTkfmjUTu9U6S5n7YoRWnlLlrDfZjxtaFWDYC81R5r4goZXnRO6cbi8dLRJZnQY8bQitLCdyZ3WqGFTmnvcu/5GcTWhlGSnndDsY17JgVreK0zaEVo6RclY1g3a5M6so3smyNLgooZWj6iur09Jg9WXVoIeMKnOvqlMWJLRynBWX021pxwkYWcrcFya0MjSEZnVa2lHmntWt4rQdoZVhPyKn29KO4p2sTgOeloTW9exHZHVa2rnZtu159utrT5n74oTW9exH5HRb2jHgyeq2F9qS0LqO/YisThWDxbJylqXBBoTWdexH5HSbZTmjMqvbXmhbQuvpNBNndbtZVotEVqe90NaE1tOZZWV1Who04MnqNktvTWg9naqvnG4b6AY8WSoGGxFaT6OZOKvTLKsY8GQpwGhEaD2Nqq+cbtehG/BkdZultye0Hs9LJ+t19uOG52DlrLfZj2N0QuvxvHRyagO9037Es21zb1ZQneTereq0PaH1OF46Wd32sl5lv7727GU1JLQex0snp1uZsjL3rG7PDz8TWpfz0snqthdRJ2CQ02lZmXuE1uX01mR1O8FAxWmWpcGmhNZlapaltyanW5myitOsbs8PZlqP5nDTrG4FGCpOs7otLSO0Hs3STs77bbvdRO/C9TVZytybszz4MEs7Wd2aie2FZtnLak5oPczNxDk1w+rUDHqzbduL3NfXnjJ3hNYDai+rGorJ6LaX9XLbboOLjE4DHj7BTOvzXNSX03GUbC80q9ugh48QWp+mmTir2wtHxWmWMnduCa1Ps4Ge1W1pxyw9S5k7Qsss6zDdRslm6VndCnj4DDOtj3NOXFa3pUGz9Kxuzw9C69FsoOd0m2UVR37ldCzgQWg9imbirG57EZ6frG57oTzgi5uvvnnon+nmh2273ZPgenXkzm+u/5ip/FVvX9TXCx77Ve+Xes/wBPa0fkmZcla3I3c0o2d1XFrmAULrl9xMnNNxL0KZe1a3pWUuILT+oabszonL6Vbxpcw9S5k7HyW0/kGZck7HF06dM0hOt0EPFxJaPzFKzqqKr053ZhW3AeR0XFrmQkLrJ26Wzeo2SlbmnqXMnU8SWj+xgZ7TseLLoCer26CHRxBaPwWWvqycbmXu9ew49iun46CHRxBamyObgr7fttuG4k4U8GQpc+ezuodWVXyZZeXUKLkTbRJZHatOeaTuoaXiK6djxVctC97kvsL27GXxoM6hZS8iq+MLx20AOR0HPTxB59CyF5HT8YXjnMosZe5cpGtoaSbO6vjCcU5lVseZOk/QNbTMsrK6vXAUYGQpc+diXUPLzbI5HV84Bj1Zyty5WMfQ0kyc1W2WVQx6cpS58ygdQ0vFV041E3c7GNegJ6vjoIcrdAstL5ys19mPm4JBT07HqlOu1C20HGyaUy+cd7mPm4Iy96yOVadcqVNoPXOwaVTHZR23AWR1fIa4UqfQ0leT03FZR29f1vuG+6EEdAktL5ysjiXKZllZHfdDCegSWvpqsrqd5l7sh+Yoc+fJOoRWzbL01eR0bCZWdZplL4sn6xBaKr6yOr5wzLJyOladEtQhtPTV5HTcPHeFTVaVuf+Y/Ug6WT20LOtkddw8tx+a1XGmTtDqoeVm4pyOm+eqTrM6ztQJWzm0ai+rGorJ6DhCrmeInL9t2+1AAJ5s5dDSV5PTsZm42A/Nerlt2w/btv1RePFUq4aWZZ2sjrOsesGaFeyjBpQVXjUo8B3zKKuGls3zrI4Hm9oP3V/9Pf3LtlkV4XIrhpZZVlbHZmJl7sep77qWC2vmZUmfB60YWjbPszouDZqpH094cZEVQ8vmeU7HWVZx7Nd57sKrlg1V//JPVgstzcRZXU9zVxxwvlox+atKQ35ttdAyy8r5sG0tCzA8Q2O5qzRUJs+tlULLwbhZb7IfNwXP0LiUybNcaLmZOKdrM7HqtfHdlcn7+97UKjOt2oN40fTPcA8dKwa1Ssyj/qz+V5l8T6uElhLlnI4H4xbNxPNRJt/QCqFlhJxVp19UcHVTxzYxp7vwqmpDfZqLWyG03Cqb1XFpUKvEGqqvq/q7VBoubIXQsnme07WZ2MBnLcrkFzZ7aBkhZ3Usc6/RuSWlNQmvBc0eWhpBc77fttuG4m6UTq+vwquWDb0vFjBzaLnvKKuWBrtRxNNH/VlXlbHT5Cc3c2gpUc7p2kxsWbAfZfKTmzW03HeU1bFisFgu6ut+eBm8TGTW0NJMnNN1lqWIh1LhpUx+IjOGln2IrGom7kiZO/epNJzEjKFllpXVcWnQ8jKfIrwGN2NouVU2p2szsYEPD7lfJn/z0D/McWYLLfsQWR1nWfUCMvDhEndl8nWmoZN3BjFbaKn2yqlm4q4H49bLCC6lTH4gM4WWWVbW6+zHTcPAh6e6H15uBTjJTKGl2iunZljvch83jerHMcviWvUM/fnnUnnP08FmCS2HmmZ13Msq9iVIqkFQHQvlKpQDzRJaDjXN6dpMrL+PvSiTP9AMoeVlk/U2+3HTUObO3u7Cq/ZNLRvuZIbQ8rLJ6niae1HmzlHqnVVHQ1mO3sHooVWjFS+bnK7NxCpPOZoy+Z2MHlqqvbK6FmC4xoazCK+w0UNLT03O+6bNxFV5Wv+DM92FVy0b2u+6wpdX/Lt7s6ST1bWZWOUpI6nVI/d3XeGLm6++ueJf31Wd92WEnFFl7l9nPmoqNaKtPhpgEaMuD9ZIRGDldN3LMqKFxYwaWkpFc7o2Exd7orCYEUNLM3FW11mWPVFY0IihpZk467vsx03DAcuwoNFCyywrq2szcT1H9rNgQaOFlhdNVtelQbN1WNRooWXjPKfzLOtF7msERjJSaNk4z+p6mnvN1m+yXyUwipGai6sJ1PEmGR+2bftN5qOm4zmChY0y03Iwbtab7MdNw3MEixsltJwPl9O5mdhzBIsbIbRqSdDGeU7XikHPETQwQmgpT86pWVbXZmLPETRwdmhpJs6qwKrg6sgN19DA2aHlqJ2srkuD2iWgibNDy2nuOV2bicu3ua8RGNmZoWV0nNW5zN3da9DEmaHlyKac77fttqG4I7N1aOSs0Hrp9IuoWhrsSCEPNHNWaNmDyOncTFyDH6CRM0LLXUdZXSsGi8FPVudiHiZxRmhpAs3pPMtSyJNXA6Cvt237feN+PwZ3dGjZg8jqevpF0eOXdX+WVf+/bgnoPItnUEeHlllWVteXiiXmvF+3TPy4bbd/X2vm1fVuNgZ0dGg5aien8/6DwU9WtUt8qmWilqBrKbbCq1or4FRHhpY9iKzOsyxLg1mXNKZXeNV9Zfa7OFXdXHzUbcF/0ZsVU6Pi38Y+7ZdqWaj+N6oa/Pxx1B9uQhVGNYt6rPpzqAMCjnp/wK0Krb/5LrinZnAjL7/94EUZVcvMNXt6igqsu/CCQxy5PAjXcpJK3jXLzDVLU6zBoYQWM3HOYFaqmEexBocRWsyilqJezPLDTiJdyq5Yg90JLWYx8j7bjCpg9mpOrxmckzXYhdBiFnr8sq7Zy7pUhdd/bNtFJfVwEaHFDPT4ZdUs6132Iz+p/luvnKxBitBiBi4MzaplwaN78e4Xa3S9sJQAocXo6hQGDaxZRywNfkqFVx3G62QNnkRoMTpl7ll1fmAFx9nuijX+a5Cfh0kILUbmKpu81/mPvEr9PFWskS6/Z1FCi5G5mTjryAKMx7i/3yW8+Cyhxcjq2CZyztzLusRdeNWe1whLmAxIaDEqZe55ezUTp1V1oeZkPkpoMSp3ZmWlzhk80l2xRs0Qzby4JbQYURVgVKk7OaMvDX5OHeGlWAOhxbCcM5g1Spn7NRRrILQYkjL3vFpmW8VdeNXMy5JhQ5YHGY1lwax6sa8UWneqqESxRkNCi9E4ZzDrqINxz6JYoxmhxUiqL8s5g1lvsh83LMUaTQgtRuIEjKwZy9yvoVijAaHFKJS553U9EukuvH6rWGM9QotRKHPPqhf3LCdg7KX28xRrLEZoMYKbbduej/CDLGTmZuK0+8UaR19+SZjQYgQKMLJWLXO/Vs3m6zDersumSxBajECZe1b3ZcHPuV+s8T77tXMEocXZqplYmXuWpcGHVXjVDP/3ijXmIrQ4W11BQk7NHhxvdLm7/S7hNQmhxZmcM5hX19fzeBVetd9lljo4ocWZlLlnKXO/TlUW1jNZZfKKNQYltDiTMvcss4SM+8Uada0LAxFanKX2shRg5NQsQdVgVoVXFQrZ7xqI0OIsvzvrP7yoOv1BAcY+FGsMRGhxhmc/j2DJsTS4vwqvunzSd30iocUZXp3xH11Y7buYZR2jvmfFGicSWhxNmXveijcTj06xxkmEFkerjW1ynDN4LsUaBxNaHM05g1n2V8agWOMgQosjKXPPU+Y+lrtijTdj/VjrEFocSZl7Vr0gFWCMp/5MqtjIyRo7EFocpQow7GdlOWpobPeLNT6M/aPO48ufu73hzl5/uep24jpZgAwnYMyjwqsO462rUOrvAVf4fwdE0n/E+DBhAAAAAElFTkSuQmCC" alt="Inteli Academy" style="height:62px">
+      <span style="font-size:28px;font-weight:700;color:var(--dk)">Inteli Academy</span>
+    </div>
+    <div class="col" style="gap:32px">
+      <p class="eyebrow">Aula 1 · TAP e projeto</p>
+      <h1>Mapeamento de conteúdo de alto engajamento para MPEs</h1>
+      <p class="lead" style="max-width:1000px">Como transformar o que já funciona nas redes em criativos para a Stone, com dados reais e um agente de IA.</p>
+    </div>
+    <div class="row" style="gap:16px">
+      <span class="pill">Projeto individual</span>
+      <span class="pill">4 semanas</span>
+      <span class="pill">Instagram + YouTube Shorts</span>
+    </div>
+  </div>
+  <div style="width:520px;flex:none;background:linear-gradient(160deg,#003D1C 0%,#0B5A30 60%,#00A868 140%);border-radius:36px;padding:56px;display:flex;flex-direction:column;justify-content:space-between;color:var(--onDk)">
+    <div class="col" style="gap:12px">
+      <p style="font-size:26px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acLight);font-weight:700">Case</p>
+      <p style="font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-1.5px">Stone × Inteli Academy</p>
+    </div>
+    <div class="col" style="gap:20px">
+      <div style="border-top:1px solid rgba(255,255,255,.2);padding-top:20px">
+        <p style="font-size:22px;color:var(--onDkMute);letter-spacing:1px;text-transform:uppercase">Kickoff</p>
+        <p style="font-size:36px;font-weight:700">28/10/2026</p>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,.2);padding-top:20px">
+        <p style="font-size:22px;color:var(--onDkMute);letter-spacing:1px;text-transform:uppercase">Entrega final, presencial na Stone</p>
+        <p style="font-size:36px;font-weight:700">25/11/2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 ROTEIRO -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">Roteiro da aula</p><h2>Do problema ao que você entrega</h2></div>
+  <div class="grid g3" style="flex:1">
+    <div class="card"><span class="num">01</span><h3>Contexto</h3></div>
+    <div class="card"><span class="num">02</span><h3>Problema</h3></div>
+    <div class="card"><span class="num">03</span><h3>Métrica</h3></div>
+    <div class="card"><span class="num">04</span><h3>Solução e arquitetura</h3></div>
+    <div class="card"><span class="num">05</span><h3>Desafios</h3></div>
+    <div class="card"><span class="num">06</span><h3>Como contornar</h3></div>
+    <div class="card"><span class="num">07</span><h3>Exemplo de saída</h3></div>
+    <div class="card"><span class="num">08</span><h3>Entregáveis e escopo</h3></div>
+    <div class="card"><span class="num">09</span><h3>Fechamento</h3></div>
+  </div>
+</section>
+
+<!-- DIVISOR 01 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 01 de 09</p>
+  <p class="dn">01</p>
+  <p class="dt">Contexto</p>
+  <p class="dq">O que é o Impulso Stone e por que o Instagram importa?</p>
+  <div class="track"><span class="on"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- IMPULSO STONE -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">01 · Contexto</p><h2>Impulso Stone: o braço do case</h2></div>
+  <div class="row grow" style="gap:56px">
+    <div class="col" style="flex:1;gap:28px;justify-content:center">
+      <p style="font-size:44px;line-height:1.25;font-weight:700;color:var(--dk);letter-spacing:-.5px">Programa de produtividade inclusiva do Instituto Stone Impacto, o braço social da Stone.</p>
+      <p class="body">Leva educação e desenvolvimento, em escala, ao empreendedor da base da pirâmide socioeconômica, para ampliar a mobilidade econômica no Brasil.</p>
+      <div class="pills"><span class="pill">Educação prática</span><span class="pill">Mentoria profissional</span><span class="pill">Acesso a recursos</span><span class="pill">Comunidade</span></div>
+    </div>
+    <div class="grid g2" style="width:760px;flex:none;align-content:center">
+      <div class="card dk" style="padding:36px"><p class="num" style="color:var(--acLight);font-size:64px">R$ 7 mi+</p><p>investidos em projetos sociais</p></div>
+      <div class="card" style="padding:36px"><p class="num" style="font-size:64px;color:var(--ac)">200 mil+</p><p>pessoas impactadas</p></div>
+      <div class="card" style="padding:36px"><p class="num" style="font-size:64px;color:var(--ac)">550+</p><p>empreendedores formados</p></div>
+      <div class="card" style="padding:36px"><p class="num" style="font-size:64px;color:var(--ac)">30+</p><p>cidades alcançadas</p></div>
+    </div>
+  </div>
+  <p class="small" style="margin-top:-20px">Fonte: impulsostone.com.br/sobre-nos</p>
+</section>
+
+<!-- MPEs IMPACTADOS -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">01 · Contexto</p><h2>Quem será impactado: os MPEs</h2></div>
+  <div class="row grow" style="gap:48px">
+    <div class="col" style="flex:1;gap:20px;justify-content:center">
+      <p class="lead" style="margin-bottom:8px">Micro e pequenos empreendedores que usam as redes como vitrine e, muitas vezes, cuidam de tudo sozinhos.</p>
+      <div class="card" style="flex-direction:row;align-items:center;gap:24px;padding:28px 32px"><div class="badge">L</div><div class="col" style="gap:4px"><h3>Lojistas</h3><p>Varejo, alimentação, beleza</p></div></div>
+      <div class="card" style="flex-direction:row;align-items:center;gap:24px;padding:28px 32px"><div class="badge">S</div><div class="col" style="gap:4px"><h3>Prestadores de serviço</h3><p>Quem vende tempo e habilidade</p></div></div>
+      <div class="card" style="flex-direction:row;align-items:center;gap:24px;padding:28px 32px"><div class="badge">A</div><div class="col" style="gap:4px"><h3>Autônomos</h3><p>O negócio é a própria pessoa</p></div></div>
+    </div>
+    <div class="card dk" style="width:720px;flex:none;padding:52px;gap:32px;justify-content:center">
+      <p class="eyebrow" style="color:var(--acLight)">Como o projeto chega até eles</p>
+      <div class="col" style="gap:8px"><h3 style="font-size:38px">Conteúdo que conversa com eles</h3><p style="font-size:28px">Posts da Stone e do Impulso baseados no que já engaja esse público.</p></div>
+      <div class="col" style="gap:8px"><h3 style="font-size:38px">Orientação prática</h3><p style="font-size:28px">O playbook pode virar um guia para o lojista melhorar o próprio Instagram.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 INSTAGRAM -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">01 · Contexto</p><h2>Por que o Instagram importa</h2></div>
+  <div class="grid g2 grow">
+    <div class="card" style="padding:52px;gap:24px">
+      <p class="eyebrow">Para o empreendedor</p>
+      <p style="font-size:56px;font-weight:800;color:var(--dk);line-height:1.1;letter-spacing:-1px">Vitrine e canal de venda ao mesmo tempo</p>
+      <p>É onde o cliente descobre o negócio, tira dúvidas e compra.</p>
+    </div>
+    <div class="card dk" style="padding:52px;gap:24px">
+      <p class="eyebrow" style="color:var(--acLight)">Para a Stone</p>
+      <p style="font-size:56px;font-weight:800;color:var(--onDk);line-height:1.1;letter-spacing:-1px">Um dos principais pontos de contato com potenciais clientes</p>
+      <p>Conteúdo que engaja MPEs é conteúdo que gera leads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISOR 02 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 02 de 09</p>
+  <p class="dn">02</p>
+  <p class="dt">Problema</p>
+  <p class="dq">O que falta hoje para a Stone escolher o que postar?</p>
+  <div class="track"><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- 5 COMO É HOJE -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">02 · Problema</p><h2>Hoje, o conteúdo é escolhido no escuro</h2></div>
+  <div class="grid g3">
+    <div class="card"><span class="num">?</span><h3>Intuição</h3><p>“Acho que isso vai funcionar.”</p></div>
+    <div class="card"><span class="num">↗</span><h3>Referências pontuais</h3><p>Um post que alguém viu e gostou.</p></div>
+    <div class="card"><span class="num">⟳</span><h3>Cópia de tendências</h3><p>Reproduzir o formato que está em alta.</p></div>
+  </div>
+  <div class="grow"></div>
+  <div class="callout">Falta um levantamento sistemático do que de fato gera engajamento entre MPEs.</div>
+</section>
+
+<!-- 6 DUAS DIMENSÕES -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">02 · Problema</p><h2>O problema tem duas dimensões</h2></div>
+  <div class="grid g2 grow">
+    <div class="card" style="padding:52px;gap:22px">
+      <span class="num" style="font-size:72px">01</span>
+      <h3 style="font-size:44px">A Stone</h3>
+      <p style="font-size:30px">Entender quais formatos, temas, criadores e tipos de vídeo engajam MPEs para produzir conteúdo com mais potencial de engajamento e captação de leads.</p>
+    </div>
+    <div class="card" style="padding:52px;gap:22px">
+      <span class="num" style="font-size:72px">02</span>
+      <h3 style="font-size:44px">O empreendedor</h3>
+      <p style="font-size:30px">O mesmo mapeamento pode virar orientação prática para o lojista fortalecer a presença digital do próprio negócio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 PERGUNTA NORTEADORA -->
+<section class="slide dark" style="justify-content:center">
+  <p class="eyebrow">02 · Pergunta norteadora</p>
+  <p style="font-size:84px;line-height:1.15;font-weight:800;letter-spacing:-2px;max-width:1500px">O que faz um post engajar MPEs, e <span style="color:var(--acLight)">como transformar isso em criativos para a Stone?</span></p>
+</section>
+
+<!-- DIVISOR 03 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 03 de 09</p>
+  <p class="dn">03</p>
+  <p class="dt">Métrica</p>
+  <p class="dq">Como comparar posts de contas com tamanhos tão diferentes?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- 8 MÉTRICA -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">03 · Métrica</p><h2>Engajamento normalizado pelo tamanho do perfil</h2></div>
+  <div class="grow" style="display:flex;flex-direction:column;justify-content:center;gap:40px">
+    <div style="background:var(--bg2);border:2px solid var(--line);border-radius:32px;padding:64px;text-align:center">
+      <p class="mono" style="font-size:62px;font-weight:500;color:var(--dk);letter-spacing:-1px;white-space:nowrap">(curtidas + comentários) ÷ seguidores</p>
+    </div>
+    <p class="lead" style="text-align:center;margin:0 auto">Sem dividir pelos seguidores, o ranking mede o tamanho da conta, não a qualidade do conteúdo.</p>
+  </div>
+</section>
+
+<!-- 9 EXEMPLO NUMÉRICO -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">03 · Métrica</p><h2>Na prática: quem tem o melhor conteúdo?</h2></div>
+  <div class="grid g2 grow">
+    <div class="card" style="padding:52px;justify-content:space-between">
+      <div class="col" style="gap:8px"><h3>Conta A</h3><p>1 milhão de seguidores · 10 mil curtidas</p></div>
+      <p class="big" style="color:#8A968F">1%</p>
+      <p>Parece mais forte em números absolutos.</p>
+    </div>
+    <div class="card dk" style="padding:52px;justify-content:space-between">
+      <div class="col" style="gap:8px"><h3>Conta B</h3><p>5 mil seguidores · 500 curtidas</p></div>
+      <p class="big" style="color:var(--acLight)">10%</p>
+      <p style="color:var(--onDk)">Engaja 10× mais a própria audiência. Vence o ranking.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 ALTO DESEMPENHO E LEAD -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">03 · Métrica</p><h2>O que é alto desempenho e como medir lead</h2></div>
+  <div class="grid g2 grow">
+    <div class="card" style="padding:52px;gap:22px">
+      <p class="eyebrow">Alto desempenho</p>
+      <p class="big">Top 10%</p>
+      <p style="font-size:30px">Da base, segundo a métrica normalizada. O critério fica declarado no README.</p>
+    </div>
+    <div class="card" style="padding:52px;gap:22px">
+      <p class="eyebrow">Lead, indicador indireto</p>
+      <p style="font-size:30px">Dados de conversão não são públicos. Então observamos:</p>
+      <ul class="clean"><li>Presença e tipo de chamada para ação</li><li>Comentários com intenção de contato</li></ul>
+      <div class="pills"><span class="pill">“quero”</span><span class="pill">“como faço”</span><span class="pill">“qual o link”</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISOR 04 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 04 de 09</p>
+  <p class="dn">04</p>
+  <p class="dt">Solução</p>
+  <p class="dq">O que vamos construir e como as peças se conectam?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- 11 CINCO PASSOS -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">04 · Solução</p><h2>A solução em cinco passos</h2></div>
+  <div class="grid g5 grow">
+    <div class="card"><span class="num">1</span><h3>Coletar</h3><p>2 a 5 mil posts de 30+ perfis, com 14+ dias de publicação</p></div>
+    <div class="card"><span class="num">2</span><h3>Ranquear</h3><p>Engajamento normalizado e corte nos 10% melhores</p></div>
+    <div class="card"><span class="num">3</span><h3>Categorizar</h3><p>Rubrica fixa em JSON, aplicada por VLM/LLM</p></div>
+    <div class="card"><span class="num">4</span><h3>Achar padrões</h3><p>O que mais aparece entre os top posts e criadores</p></div>
+    <div class="card dk"><span class="num" style="color:var(--acLight)">5</span><h3>Gerar criativos</h3><p>Gancho, roteiro, legenda e CTA com referências</p></div>
+  </div>
+</section>
+
+<!-- 12 ARQUITETURA -->
+<section class="slide alt" style="gap:36px">
+  <div class="head"><p class="eyebrow">04 · Solução</p><h2>Arquitetura de referência</h2></div>
+  <div class="flow">
+    <div class="node"><span class="step">COLETA</span><h3>Instagram + YouTube</h3><p>Perfis públicos, posts com 14+ dias</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><span class="step">BASE</span><h3>Dados</h3><p>Tabelas limpas e validadas</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><span class="step">RANKING</span><h3>Top 10%</h3><p>Métrica normalizada</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><span class="step">MULTIMODAL</span><h3>Categorização</h3><p>Thumbnail, frames e transcrição com VLM</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><span class="step">AGENTE</span><h3>LangGraph</h3><p>Decide quais ferramentas acionar</p></div>
+    <div class="arrow">→</div>
+    <div class="node hl"><span class="step">SAÍDA</span><h3>Criativo</h3><p>Com posts de referência e justificativa</p></div>
+  </div>
+  <p class="eyebrow" style="margin-top:12px">Ferramentas por etapa</p>
+  <div class="row" style="gap:0;align-items:flex-start;margin-top:-18px"><div class="tcol"><span class="chip">Instaloader</span><span class="chip">HikerAPI / Apify</span><span class="chip">YouTube Data API v3</span><span class="chip">requests + backoff</span></div><div style="width:46px;flex:none"></div><div class="tcol"><span class="chip">pandas</span><span class="chip">SQLite / Parquet</span><span class="chip">Pydantic</span></div><div style="width:46px;flex:none"></div><div class="tcol"><span class="chip">pandas</span><span class="chip">numpy (percentil)</span></div><div style="width:46px;flex:none"></div><div class="tcol"><span class="chip">Gemini Flash</span><span class="chip">OpenRouter</span><span class="chip">Qwen2.5-VL</span><span class="chip">ffmpeg</span><span class="chip">faster-whisper</span></div><div style="width:46px;flex:none"></div><div class="tcol"><span class="chip">LangGraph</span><span class="chip">LangChain tools</span><span class="chip">SQL na base</span></div><div style="width:46px;flex:none"></div><div class="tcol"><span class="chip">FastMCP</span><span class="chip">Pydantic</span><span class="chip">Logs JSONL</span></div></div>
+</section>
+
+<!-- 13 RUBRICA -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">04 · Solução</p><h2>A rubrica de categorização</h2></div>
+  <div class="grid g4 grow">
+    <div class="card"><h3>Formato</h3><p>Tipo de post, duração, formato de vídeo</p></div>
+    <div class="card"><h3>Gancho</h3><p>Primeiros 3s, tipo de gancho, força de 0 a 10</p></div>
+    <div class="card"><h3>Tema</h3><p>Vendas, finanças, marketing, gestão, maquininha…</p></div>
+    <div class="card"><h3>Pessoas</h3><p>Rosto, criador é empreendedor real, prova social</p></div>
+    <div class="card"><h3>Texto e edição</h3><p>Texto na tela, tamanho da legenda, ritmo de cortes</p></div>
+    <div class="card"><h3>Linguagem</h3><p>Tom, linguagem regional, clareza da mensagem</p></div>
+    <div class="card"><h3>Conversão</h3><p>Tem CTA, tipo de CTA, oferta ou benefício explícito</p></div>
+    <div class="card dk"><h3>Síntese</h3><p>Os cinco elementos que mais explicam o post</p></div>
+  </div>
+  <p class="small">Resposta exclusivamente em JSON, uma por publicação. Campo a campo, na Aula 2.</p>
+</section>
+
+<!-- DIVISOR 05 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 05 de 09</p>
+  <p class="dn">05</p>
+  <p class="dt">Desafios</p>
+  <p class="dq">O que pode dar errado no caminho?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- 15 DESAFIOS -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">05 · Desafios</p><h2>Os quatro desafios do case</h2></div>
+  <div class="col grow" style="gap:16px;justify-content:center">
+    <div class="card" style="flex-direction:row;align-items:center;gap:32px;padding:26px 36px"><span class="num" style="width:70px">01</span><h3 style="width:520px;flex:none">Coleta do Instagram</h3><p>Não há rota pública simples para perfis de terceiros</p></div>
+    <div class="card" style="flex-direction:row;align-items:center;gap:32px;padding:26px 36px"><span class="num" style="width:70px">02</span><h3 style="width:520px;flex:none">Limites de requisição</h3><p>APIs e modelos gratuitos podem bloquear (erro 429)</p></div>
+    <div class="card" style="flex-direction:row;align-items:center;gap:32px;padding:26px 36px"><span class="num" style="width:70px">03</span><h3 style="width:520px;flex:none">Viés de sobrevivência</h3><p>Contas grandes são mais fáceis de encontrar</p></div>
+    <div class="card" style="flex-direction:row;align-items:center;gap:32px;padding:26px 36px"><span class="num" style="width:70px">04</span><h3 style="width:520px;flex:none">Qualidade da categorização</h3><p>A IA pode classificar errado</p></div>
+  </div>
+</section>
+
+<!-- DIVISOR 06 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 06 de 09</p>
+  <p class="dn">06</p>
+  <p class="dt">Como contornar</p>
+  <p class="dq">Quais rotas e práticas tornam o projeto viável?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- ONDE ENCONTRAR PERFIS -->
+<section class="slide" style="gap:32px">
+  <div class="head"><p class="eyebrow">06 · Como contornar</p><h2>Onde encontrar os perfis</h2></div>
+  <div class="grid g4" style="align-items:stretch"><div class="card" style="padding:30px;gap:16px"><h3 style="font-size:30px">Busca automática</h3><ul class="clean" style="gap:10px"><li style="font-size:24px">Apify e HikerAPI por palavra-chave: “MEI”, “lojista”</li><li style="font-size:24px">Hashtags: #mei, #pequenosnegocios</li><li style="font-size:24px">YouTube: busca inicial de canais</li></ul></div><div class="card" style="padding:30px;gap:16px"><h3 style="font-size:30px">Ferramentas de influenciadores</h3><ul class="clean" style="gap:10px"><li style="font-size:24px">HypeAuditor Discovery</li><li style="font-size:24px">influencers.club</li><li style="font-size:24px">Filtro por categoria, faixa de seguidores e local</li></ul></div><div class="card" style="padding:30px;gap:16px"><h3 style="font-size:30px">Ecossistema Stone</h3><ul class="clean" style="gap:10px"><li style="font-size:24px">Aba “seguindo” de Stone, Ton, Impulso e Sebrae</li><li style="font-size:24px">Campanha #BreakStone</li><li style="font-size:24px">Embaixadores: só 1 ou 2, como referência</li></ul></div><div class="card" style="padding:30px;gap:16px"><h3 style="font-size:30px">Curadoria do setor</h3><ul class="clean" style="gap:10px"><li style="font-size:24px">Prêmio Microinfluenciadores Digitais</li><li style="font-size:24px">Palestrantes da Semana do MEI e do Sebrae Delas</li><li style="font-size:24px">Concorrentes: InfinitePay, PagBank, Cora</li></ul></div></div>
+  <div class="grow"></div>
+  <div class="flow">
+    <div class="node" style="flex-direction:row;align-items:center;gap:20px"><span class="num" style="font-size:36px">1</span><div class="col" style="gap:4px"><h3>Filtrar</h3><p>Público MPE na bio, ativo nos últimos 12 meses</p></div></div>
+    <div class="arrow">→</div>
+    <div class="node" style="flex-direction:row;align-items:center;gap:20px"><span class="num" style="font-size:36px">2</span><div class="col" style="gap:4px"><h3>Equilibrar</h3><p>Micro (até 10 mil), médio (10 a 100 mil) e grande</p></div></div>
+    <div class="arrow">→</div>
+    <div class="node hl" style="flex-direction:row;align-items:center;gap:20px"><span class="num" style="font-size:36px;color:var(--acLight)">3</span><div class="col" style="gap:4px"><h3>30+ perfis</h3><p>Com as colunas “origem” e “faixa” na base</p></div></div>
+  </div>
+</section>
+
+<!-- 16 ROTAS -->
+<section class="slide" style="gap:32px">
+  <div class="head"><p class="eyebrow">06 · Como contornar</p><h2>Rotas de coleta do Instagram</h2></div>
+  <table>
+    <tr><th style="width:21%">Categoria</th><th style="width:27%">Ferramentas</th><th style="width:26%">Dados</th><th style="width:26%">Risco</th></tr>
+    <tr><td>Open source, sem login</td><td><b>Instaloader</b> (mais mantido, MIT)<br>omkarcloud/instagram-scraper</td><td>Posts, legenda, data, curtidas, comentários, seguidores</td><td>Bloqueio por limite (401 “please wait”)</td></tr>
+    <tr><td>Open source, com login</td><td><b>instagrapi</b> (API privada do app)</td><td>Mais completo: Reels, comentários, insights</td><td>Conta banida (challenge_required); exige conta descartável</td></tr>
+    <tr><td>Serviços com créditos grátis</td><td>HikerAPI · Apify · Bright Data · ScrapFly</td><td>JSON pronto, varia por serviço</td><td>Créditos acabam rápido; continua sendo scraping</td></tr>
+    <tr class="muted"><td>Descartado</td><td>drawrowfly/instagram-scraper</td><td>—</td><td>Parado desde 2022</td></tr>
+  </table>
+  <div class="warn"><b>Atenção:</b> todas violam os Termos do Instagram em algum grau, e o TAP coloca isso fora do escopo (seção 4.3). Use apenas dentro do que foi definido no kickoff.</div>
+</section>
+
+<!-- 19 RESPOSTAS -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">06 · Como contornar</p><h2>E os outros desafios?</h2></div>
+  <div class="col grow" style="gap:18px;justify-content:center">
+    <div class="row" style="align-items:stretch;gap:0">
+      <div class="card" style="width:560px;flex:none;justify-content:center"><h3>Limites de requisição</h3></div><div class="arrow">→</div>
+      <div class="card" style="flex:1;justify-content:center;background:var(--tint);border-color:var(--tint)"><p style="color:var(--dk);font-size:28px">OpenRouter (modelos free) e Gemini free tier, com cache, backoff e modelo local (Qwen2.5-VL) como plano B</p></div>
+    </div>
+    <div class="row" style="align-items:stretch;gap:0">
+      <div class="card" style="width:560px;flex:none;justify-content:center"><h3>Viés de sobrevivência</h3></div><div class="arrow">→</div>
+      <div class="card" style="flex:1;justify-content:center;background:var(--tint);border-color:var(--tint)"><p style="color:var(--dk);font-size:28px">Amostra com contas pequenas, médias e grandes</p></div>
+    </div>
+    <div class="row" style="align-items:stretch;gap:0">
+      <div class="card" style="width:560px;flex:none;justify-content:center"><h3>Categorização</h3></div><div class="arrow">→</div>
+      <div class="card" style="flex:1;justify-content:center;background:var(--tint);border-color:var(--tint)"><p style="color:var(--dk);font-size:28px">Validação manual de pelo menos 50 posts</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISOR 07 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 07 de 09</p>
+  <p class="dn">07</p>
+  <p class="dt">Exemplo de saída</p>
+  <p class="dq">Como fica um criativo gerado pelo agente?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span><span class=""></span></div>
+</section>
+
+<!-- 20 EXEMPLO DE SAÍDA -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">07 · Exemplo de saída <span style="color:#8A968F;letter-spacing:1px">· ilustrativo</span></p><h2>Um criativo na prática</h2></div>
+  <div class="row grow" style="gap:40px">
+    <div class="col" style="width:560px;flex:none;gap:20px">
+      <p class="eyebrow">Pedido</p>
+      <div style="background:var(--dk);color:var(--onDk);border-radius:28px 28px 28px 6px;padding:40px;font-size:34px;line-height:1.35;font-weight:600">“Preciso de um Reels para atrair donos de pequenos restaurantes.”</div>
+      <p class="mono small" style="color:var(--act)">mode = gerar_criativo<br>segment = alimentação</p>
+    </div>
+    <div class="card" style="flex:1;padding:44px;gap:20px">
+      <div class="row" style="gap:20px;align-items:baseline"><span class="eyebrow" style="width:190px;flex:none">Gancho</span><p style="color:var(--dk);font-size:30px;font-weight:700">“Seu restaurante perde dinheiro nisso e você nem percebe”</p></div>
+      <div class="row" style="gap:20px;align-items:baseline"><span class="eyebrow" style="width:190px;flex:none">Roteiro</span><p>Lista/dicas: 3 erros comuns no caixa, 30 a 45s, talking head</p></div>
+      <div class="row" style="gap:20px;align-items:baseline"><span class="eyebrow" style="width:190px;flex:none">CTA</span><p>“Salva esse post para conferir depois”</p></div>
+      <div class="row" style="gap:20px;align-items:baseline"><span class="eyebrow" style="width:190px;flex:none">Referências</span><div class="pills"><span class="pill">post #1 · [link]</span><span class="pill">post #2 · [link]</span><span class="pill">post #3 · [link]</span></div></div>
+      <div class="row" style="gap:20px;align-items:baseline"><span class="eyebrow" style="width:190px;flex:none">Confiança</span><p>Aviso quando o padrão se apoia em poucos posts</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISOR 08 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 08 de 09</p>
+  <p class="dn">08</p>
+  <p class="dt">Entregáveis</p>
+  <p class="dq">O que precisa estar pronto em 25/11?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span><span class=""></span></div>
+</section>
+
+<!-- 21 ENTREGÁVEIS -->
+<section class="slide">
+  <div class="head"><p class="eyebrow">08 · Entregáveis</p><h2>O que você entrega em 25/11</h2></div>
+  <div class="grid g3 grow">
+    <div class="card"><div class="badge">01</div><h3>Base de dados</h3><p>Documentada, com critérios de seleção e limitações</p></div>
+    <div class="card"><div class="badge">02</div><h3>Mapeamento</h3><p>Ranking normalizado, categorização validada, perfis em destaque</p></div>
+    <div class="card"><div class="badge">03</div><h3>Agente</h3><p>Função Python e servidor MCP, com referências em cada resposta</p></div>
+    <div class="card dk"><div class="badge" style="background:var(--dk2);color:var(--acLight)">04</div><h3>Playbook</h3><p>Padrões, exemplos reais e no mínimo 5 criativos prontos para produção</p></div>
+    <div class="card"><div class="badge">05</div><h3>Demonstração</h3><p>Executável: análise, referências, criativo e justificativa</p></div>
+    <div class="card"><div class="badge">06</div><h3>README</h3><p>Metodologia, arquitetura, resultados, limitações e evolução</p></div>
+  </div>
+</section>
+
+<!-- 22 NÍVEIS -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">08 · Entregáveis</p><h2>Três níveis de ambição</h2></div>
+  <div class="grid g3 grow" style="align-items:end">
+    <div class="card" style="height:72%;justify-content:space-between">
+      <div class="col" style="gap:14px"><span class="pill" style="align-self:flex-start">Obrigatório</span><h3 style="font-size:40px">1 · Mínimo</h3><p>Coleta, ranking normalizado, categorização por legenda e thumbnail, playbook gerado pelo agente</p></div>
+      <p class="small">Sem custo · roda no Colab gratuito</p>
+    </div>
+    <div class="card dk" style="height:86%;justify-content:space-between">
+      <div class="col" style="gap:14px"><span class="pill" style="align-self:flex-start;background:var(--ac);color:#00230F">Recomendado</span><h3 style="font-size:40px">2 · Recomendado</h3><p>Nível 1 + frames e transcrição de vídeo, rubrica completa por VLM e criativos vinculados às referências</p></div>
+      <p class="small" style="color:var(--onDkMute)">Risco de limite de requisições · plano B local</p>
+    </div>
+    <div class="card" style="height:100%;justify-content:space-between">
+      <div class="col" style="gap:14px"><span class="pill out" style="align-self:flex-start">Depois do nível 2</span><h3 style="font-size:40px">3 · Avançado</h3><p>Nível 2 + comparação com o resto da base, RAG sobre os top posts e análise de intenção nos comentários</p></div>
+      <p class="small">Mais tempo de processamento</p>
+    </div>
+  </div>
+</section>
+
+<!-- IR ALÉM -->
+<section class="slide" style="gap:32px">
+  <div class="head"><p class="eyebrow">08 · Entregáveis</p><h2>Formas de ir além</h2></div>
+  <div class="grid grow" style="grid-template-columns:repeat(6,1fr)">
+    <div class="card dk" style="grid-column:span 3;padding:48px"><h3 style="font-size:40px"><span style="color:var(--acLight)">01</span>&nbsp; Embaixador de conteúdo</h3><p>Um empreendedor real, de preferência cliente Stone, que grava e assina os criativos do playbook.</p></div>
+    <div class="card dk" style="grid-column:span 3;padding:48px"><h3 style="font-size:40px"><span style="color:var(--acLight)">02</span>&nbsp; Collab com criador</h3><p>Parceria com um perfil do nicho MPE para publicar um criativo em conjunto e alcançar a audiência dele.</p></div>
+    <div class="card" style="grid-column:span 2"><h3><span style="color:var(--ac)">03</span>&nbsp; Teste piloto</h3><p>Publicar 1 ou 2 criativos no perfil do embaixador e comparar o engajamento real com o padrão da base.</p></div>
+    <div class="card" style="grid-column:span 2"><h3><span style="color:var(--ac)">04</span>&nbsp; Playbook do lojista</h3><p>Versão do mapeamento para o próprio empreendedor usar como guia de conteúdo.</p></div>
+    <div class="card" style="grid-column:span 2"><h3><span style="color:var(--ac)">05</span>&nbsp; Painel interativo</h3><p>Filtros por setor, formato e tema para o time da Stone explorar os padrões sozinho.</p></div>
+  </div>
+</section>
+
+<!-- DIVISOR 09 -->
+<section class="slide dark divider">
+  <div class="ring"></div>
+  <p class="eyebrow">Bloco 09 de 09</p>
+  <p class="dn">09</p>
+  <p class="dt">Fechamento</p>
+  <p class="dq">Como vocês imaginam a arquitetura do projeto?</p>
+  <div class="track"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="on"></span></div>
+</section>
+
+<!-- ATIVIDADE ARQUITETURA -->
+<section class="slide alt">
+  <div class="head"><p class="eyebrow">Atividade em grupo</p><h2>Pensem juntos na arquitetura inicial</h2></div>
+  <p class="lead" style="margin-top:-12px">Desenhem o fluxo de ponta a ponta, da coleta ao criativo. Para cada etapa, respondam:</p>
+  <div class="grid g5 grow">
+    <div class="card"><span class="num">1</span><h3>Coleta</h3><p>Qual rota usar? Quais perfis entram e por quê?</p></div>
+    <div class="card"><span class="num">2</span><h3>Base</h3><p>Onde guardar os dados e quais campos são essenciais?</p></div>
+    <div class="card"><span class="num">3</span><h3>Categorização</h3><p>Qual modelo, qual rubrica e como validar?</p></div>
+    <div class="card"><span class="num">4</span><h3>Agente</h3><p>Quais ferramentas ele precisa e em que ordem as usa?</p></div>
+    <div class="card dk"><span class="num" style="color:var(--acLight)">5</span><h3>Entrega</h3><p>Como a Stone vai usar o resultado no dia a dia?</p></div>
+  </div>
+  <div class="callout">No fim, cada grupo apresenta o desenho e o principal risco que enxergou.</div>
+</section>
+
+</div></div>
+<div id="progress"></div>
+<div id="hint">← → navegar · F tela cheia</div>
+
+<script>
+(function(){
+  const STONE="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKkAAAAuCAYAAABTYDlPAAAKLElEQVR4Xu2dW8hmUxjHn5HTnYbkmDQXLpyPycWglKQYJTkkIslckMOFw43cEHIIxYWI5JCUww0jhQsunBqHuZAkOU2K3BFFv9d6vta3Zu+9/mvtvd93zzfvr97MN97Ze621/+tZz/OsZ+1vnW081CbAGWZ2sNCOrWa2TfjekjXE7hPpy1tmtpfQlkfN7Abhe0vWELtNpC+KQGGfibR3yRyZikiXLGllKdIlk2cp0iWTpyZwWt/Sq98n31udtj7Covu5y7VNFemR4fmebWYbwp8PM7Pvo+f+odksRQQ/j/QwjzJbaUsXNffn4R9kZvub2YVRH1PeNbPPzOzXEfsZQ7v2Npv99zgzOyB5BuDP4Vsz2x49h7HTdT5mkGqjrV1Mcp6PzLpMnhRxcvNbzexA8aq/mNm94UF+Lor1X/HaKmea2XvilxHmEWZ2dehrST9fNrNXgmCHFoS364TQtmPE/gDPgEl0j5n9VDAWKt62m8zs1EJteLvknHebSGnExWb2kNrqFshr8hBzghlapAzew5m2YwWONbMHzOyknv38xMxuEfqpwuYGfdik/oMMXGvLABshQ46ZG7OXcpa1KXBCoG8MIFC43my2PF6aG8U5wwrxdGhbX4EC16CfjwSXoQ83hmsNJVDA2LzT8zmgi7sGHDNWLNqF1piUrTRZUvwFdckrocu6zdOSYg0Q6LlmtofZzAr+YDabsGzN9hUtFuLEnHVoAYH2Xb1ylLhCjhuuvmPTxWVm9kLTF9LA6dWRBOqzGae+sSFzhCAEq7c5uicT06Nm/j8P8pkg4lKY4J9WCHUeAgX63iqIBhAo/RnDcMU8H37YQR/xcn/+gD5QGzSETi8KhEiQxGRBiPyZj7fJI08Giii61qq5ULvSRTHzEqijPgfaT13F2AKN2+WZpBViS/ranJSDD3LynO4Vg198mpldG/7yy7DMk7b5KETBcTYCwd4c0js1YuXBEvHnJiUPpeb6fcE6cu+uvC8+aElWYQi+Cm7XSprKRarOeGBAWTJeDw/glJBXvEJsIX4N95tnUhyB+nLiHG1me4YfGAfECmnazLMENUJCqA8GsbfxojhuQ0PbruzIghDMEPiq4Iv/aGYfRGNJLp28uvv/KqsMmQdODCSBTQ4Ci7ZELLOS2alUNPHAsVJOSeDkGwZt/JOkg2gXs7OJv8zs6zCoJMTZkCCv2JTf7bMkt41bV9tSEAFuigJJf4W/g1vTZDA+Lggicyk/jBJWuUT0bNzMcs8uUh5KzqwrtZwsbTzkHAx4vAyqIsUluSB38YTctWOh+tLPStE0GWuFyj0IyFIIVJVUE/2+Slx9fBdINRhN0T5WlDFQKAnCSq77RchjD15gwoN9VujZfsJ3mvij8N8p+VksP8ETy5Jv+f7Zch+WfmXFSeEeTblARaDAyqO6R3wPC3SbOFbsaKWofcRwlWRr2NRRr43RnBmykiqoi6I0TRdPhdwj1pIcZPrh75/ovMJwpH5oG4iIQcGSYkG6BFErVKLkmB2i2IFxHzvHfQ1fUCdPzSkJxg8NKNzOlzxwokO55R5H++2wjYhf2FbEwWw5bwHBUUqpCFhenhST8DXBVOqrq37j2LChEQey6rj1yQZR26EEoqfHImX/VJk9ROZYJ2YCe8FUAwEOPb6oVwYh4KJKlxG4puCa+IyXFO5t1wgV98OXR9JhUyH2l+8WG4VhU9ypJvCDFZjI692SMnDq0ghYVVJOadqJaPFNM/suLJ2IOFdcMhaq7wNsY9ZUMSFUJqg6dhTtuEinel5LMVZQMr592Bgn8/Ed++7NsnSw1McQSOGnLkqsOZjVNQJ1XHSKUMkXLiljQxw4peIaCqytVwhNDdInQ0wehMq1cjCJlxQSixQfckwTTiKXoo2pUJLfU0CoSjCwpJA0BVWbXlHBqpIQHxtlm1fZdCglPk6zZCCa8qQIFSuT236sBWujpjlqURLfVOQrYlZZVKHIWmd720E8li6idAoQLh8goEohzVG6vTk0BIkUP6vbjV0gUCrfdyUItA8ZucMUrGxtEylgjbCq+JGcBfIXip1jNtv875MJUNMcY0M7+gqVrTsqmZSaS/KxawW16q0v27pE6iDWOALGwpL8Zb8bEC/5v9JyLKxPn9RPDnZElMngQq2x7AiU7c7cbp3D2E0dddw4RZw77DgIiBSx5Lbo4qog9/fiHSUGnwfGdZR8IfDdMUWK76uIFPgeFUklQsWffbxAoHDHIE9tXNRx43t9RErBTVNxS8oWRMr2YS71lCvTQ7hefUMRdO56wPGMMSnNfyJUaijVUwP46+okcMaclENB2aYKmZoaoWIYqQNR8sabiO69PK2LkmJVijTGorRUr7QIAj8bi5qDPWteJoGPqfqZpW1ZFBgbgiKF2kzNdaJA4RtESnGJgprf5DU1pVCBpEDnSohPhKr40t8GVoBVgAKLEh+zxJVYNLzoQoVTDxziVGGCq0aPWpBZ4KQONLNGOZJM/lHBK6jAXyKRg+WBJfn9qMwwhqMjcH+owsJvxlVRB8XJLf2Mg9drMn5kPKDt6IyyZTolcJVKajlYJfigkTY3C3ESYJe4SI8xKH58pOSFEJTpcT7Jgyk/rkC0RwGt4mf8f+/V5I55lJBuedZeu+3YhgebWFQ/bNYm1LYjL6T21DROzQsdsG6qi9F0BqvkqEcM1g+/lhduQMm7olL2JdbxHaezChRAPpAInm1FHv5v4aAbs0gVaNPyrg6oQhqUqfWLKZ6eSnemCIDYkcOi+lYoB/pSCCB3pmU+BovIKlQKGsC3Z+z4KPnjJnhms0ySi5RBH1IkOSgwTqnxH1VKztY0CZVIND2j5ELFbWFVoRyRpZ/JijgZ5JrId0rcWXDUY0hwNVbchnjvfkyRxDA7m1IxuBxj+m4IpsYygL+QjOAxFiv9YGlj6eaDQLGsBKOlKbApgiWjIJwlfF4g0FVlo/GOEyJh9qtHWWvAn2V2tkHNAMcqSgMdFb937fW9FA+xc0Y/BheDOgd8MY7WLPr4zFDQj+NDbULt0q3Cao6xXDV2aRUUsx+hqqf5SvC3zeUqlBCSshlQA/fmhCMWu08fETl+efxxAWfft7kTwopB3DKmS8gJDop9dpjcqUgBoWLih2wQlkd9HaIXtvQVUhdYbNqjvCNAhfEiWufauYm4M4JQEREGpM8ET+FaPGtcqcZxayswQc00iLRKTfGI47kz9bXkMTxsXA8sO23ok8pogj4yMAQ7uBi8V6B0OeOdRRw65G3WpX0c+yBe6e6cAiLC92a14Jn0KePE93wuXKvTNcq9Mx/iPChbqIcH8abpJj/mzOCQ6Ha/bAir4r/cAMHGv9igDd4V39nxBvwV7PQRATXlMNM++nGYmj4SgPkvkOiCseQ+pffw9y8p4GKVXt+1gSFjkjNm3JOfm7TBmwv9FHGRNhSRpsS/cSLeAiVPWCqMKUPCPt3iXWt9HJombfAuBiYAry6qmQj2HztYOc3GshZuAAAAAElFTkSuQmCC", INTELI="data:image/png;base64,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";
+  const deck=document.getElementById('deck');
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  slides.forEach((s,i)=>{
+    if(i===0) return;
+    const f=document.createElement('div'); f.className='foot';
+    f.innerHTML='<img class="st" src="'+STONE+'" alt="Stone"><div class="sep"></div><img class="ia" src="'+INTELI+'" alt="Inteli Academy"><span class="tag">Inteli Academy × Stone · Aula 1</span><span class="pg">'+String(i+1).padStart(2,'0')+' / '+total+'</span>';
+    s.appendChild(f);
+  });
+  let cur=0;
+  function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);deck.style.transform='scale('+s+')';}
+  function go(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+  }
+  addEventListener('resize',fit);
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1);}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home')go(0); else if(e.key==='End')go(total-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
+  });
+  document.getElementById('stage').addEventListener('click',e=>{go(e.clientX>innerWidth/2?cur+1:cur-1);});
+  let tx=null;
+  addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+  addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(d<0?cur+1:cur-1);tx=null;});
+  fit();
+  let h=NaN;try{h=parseInt(location.hash.slice(1));}catch(e){}go(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>

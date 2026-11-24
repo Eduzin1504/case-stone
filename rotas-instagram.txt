@@ -1,0 +1,78 @@
+ROTAS PARA COLETAR DADOS DO INSTAGRAM SEM A API OFICIAL DA META
+Case Stone / Inteli Academy - levantamento em 27/10/2026
+
+OFICIAL
+
+1. Business Discovery (Graph API)
+   Única rota oficial para ler outros perfis. Métricas básicas de contas
+   profissionais públicas por username. Exige conta profissional, Página do
+   Facebook e app da Meta. Em modo dev funciona para testers sem app review.
+   Não cobre contas pessoais. Vale pedir à Stone um app em modo dev.
+
+OPEN SOURCE, SEM LOGIN (menor risco de bloqueio, menos dados)
+
+2. Instaloader (Python, MIT, ~13 mil estrelas, release em julho de 2026)
+   Lê o que o perfil público mostra: posts, legenda, data, curtidas,
+   comentários, seguidores. Sem login a Meta limita bastante e aparece erro
+   401 "please wait". É o mais mantido e o mais usado em projeto acadêmico.
+   https://github.com/instaloader/instaloader
+
+3. omkarcloud/instagram-scraper (Python)
+   Perfis, posts, reels, comentários e hashtags como JSON, sem API key nem
+   proxy, com API local. Licença e atividade não verificadas.
+   https://github.com/omkarcloud/instagram-scraper
+
+4. drawrowfly/instagram-scraper (Node)
+   Sem login, pega posts, comentários e quem curtiu. Parado desde 2022,
+   provavelmente quebrado.
+   https://github.com/drawrowfly/instagram-scraper
+
+OPEN SOURCE, COM LOGIN (mais dados, risco de bloquear a conta usada)
+
+5. instagrapi (Python, release 2.18.x em agosto de 2026)
+   O equivalente mais próximo da Evolution API: expõe a API privada do app,
+   cobre posts, comentários, insights e Reels. Os mantenedores dizem que é
+   "frágil em produção" e indicado para "testes, pesquisa e automação interna
+   controlada". Erro comum: challenge_required. Precisa de conta descartável.
+   https://github.com/subzeroid/instagrapi
+
+SERVIÇOS PAGOS SOBRE A API PRIVADA (mesma ideia do instagrapi, hospedada)
+
+6. HikerAPI (do autor do instagrapi)
+   Pay-per-request, cerca de 0,0006 dólar por request, plano mínimo em torno
+   de 5 dólares, 100 requests grátis no trial. Suficiente para a base inteira
+   do case por poucos dólares.
+   https://hikerapi.com
+
+7. RocketAPI
+   A partir de 49 euros por mês para 50 mil requests. Caro para o escopo.
+   https://rocketapi.io
+
+8. Apify, Bright Data, ScrapFly e similares
+   Scrapers hospedados com crédito grátis: Apify dá ~5 dólares, Bright Data
+   anuncia 5 mil créditos por mês. Cobrem posts, curtidas, comentários e
+   legenda por username, sem login.
+   https://apify.com/apify/instagram-scraper
+   https://github.com/brightdata/instagram-scraper-python
+
+DESCARTADA
+
+9. Meta Content Library
+   Só contas verificadas ou com 25 mil seguidores ou mais, aprovação leva
+   semanas. Fora do prazo e com viés contra contas pequenas.
+
+PONTO CENTRAL PARA O KICKOFF
+
+Tudo da opção 2 em diante viola os Termos da Meta, e o TAPI veda rota que
+viole Termos. A escolha real não é técnica: é qual dessas a Stone e o Inteli
+autorizam por escrito. Se autorizarem, a combinação mais barata e estável é
+Instaloader para o grosso e HikerAPI ou Apify para o que ele não alcança.
+Em qualquer caso, cache e backoff desde o primeiro dia.
+
+FONTES
+https://scrapfly.io/blog/posts/best-open-source-instagram-scrapers
+https://www.xpoz.ai/blog/guides/open-source-social-media-scrapers-what-still-works-2026/
+https://instagrapi.com/compare/instaloader
+https://www.postzen.dev/blog/instagrapi-vs-instagram-graph-api
+https://subzeroid.github.io/blog/hikerapi-vs-rocketapi/
+https://www.socialcrawl.dev/blog/best-instagram-data-apis-2026

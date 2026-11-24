@@ -1,0 +1,14 @@
+httpx
+pandas
+python-dotenv
+pydantic
+openai
+apify-client
+langgraph
+mcp
+google-genai
+streamlit
+statsmodels
+fastapi
+uvicorn
+python-multipart

@@ -1,0 +1,10 @@
+.env
+.venv/
+data/
+__pycache__/
+static/
+.superpowers/
+library/
+node_modules/
+web/dist/
+.cache/

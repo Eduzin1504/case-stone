@@ -1,0 +1,11 @@
+/* Progresso narrado (usado por avaliar e criar). */
+.avaliar-progresso { flex: 1; min-width: min(100%, 320px); display: flex; flex-direction: column; gap: var(--e5); padding: clamp(24px, 4vw, 48px); border-radius: var(--r-dado); }
+.avaliar-etapas { display: flex; flex-direction: column; gap: var(--e3); }
+.avaliar-etapa { display: flex; align-items: center; gap: var(--e3); font-size: 1.0625rem; color: var(--texto-2); }
+.avaliar-etapa-marca { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--tinta); color: var(--lima); font-weight: 600; font-size: 0.875rem; }
+.avaliar-etapa--atual { color: var(--texto); font-weight: 600; font-size: 1.375rem; animation: avaliar-entra 0.4s var(--ease) both; }
+.avaliar-etapa--atual .avaliar-etapa-marca { background: none; border: 3px solid var(--tinta); border-right-color: transparent; animation: avaliar-gira 0.9s linear infinite; }
+.avaliar-tempo { display: flex; align-items: baseline; gap: var(--e3); color: var(--texto-2); }
+@keyframes avaliar-gira { to { transform: rotate(360deg); } }
+@keyframes avaliar-entra { from { opacity: 0; transform: translateY(8px); } }
+

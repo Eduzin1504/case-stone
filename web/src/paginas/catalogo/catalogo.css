@@ -1,0 +1,41 @@
+/* Catálogo: barra de filtros que gruda no topo, mosaico, bandeja de comparação. */
+.catalogo-barra { position: sticky; top: 0; z-index: 20; display: flex; flex-direction: column; gap: 10px; margin: 0 calc(-1 * var(--e3)); padding: 12px var(--e3); background: var(--fundo); border-bottom: 1.5px solid var(--tinta); }
+.catalogo-linha1 { display: flex; align-items: center; gap: var(--e4); }
+.catalogo-busca { flex: 1; max-width: 520px; }
+.catalogo-busca .campo-entrada { border-radius: var(--r-pilula); padding-left: 20px; }
+.catalogo-conta { margin-left: auto; font-size: var(--t-pequeno); color: var(--texto-2); white-space: nowrap; }
+.catalogo-conta b { font-family: var(--f-titulo); font-weight: 400; font-size: var(--t-num); line-height: 1; color: var(--tinta); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.catalogo-abrir { display: none; }
+.catalogo-filtros { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.catalogo-filtros .seletor select { padding-top: 7px; padding-bottom: 7px; font-size: var(--t-pequeno); }
+.catalogo-filtros .chip { padding: 8px 14px; }
+.catalogo-acoes { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* modo comparar: os cards viram alvos de escolha */
+.catalogo-comparando .pc { cursor: copy; }
+
+.catalogo-fim { display: flex; flex-direction: column; align-items: center; gap: var(--e3); padding-top: var(--e4); }
+
+.catalogo-bandeja { position: sticky; bottom: 18px; z-index: 25; align-self: center; display: flex; align-items: center; gap: var(--e4); max-width: 100%; padding: 10px 14px 10px 10px; background: var(--floresta); color: #fff; border-radius: 22px; box-shadow: var(--sombra-ficha); animation: catalogo-sobe 0.28s var(--ease); }
+.catalogo-bandeja-vagas { display: flex; gap: 6px; }
+.catalogo-vaga { display: grid; place-items: center; width: 44px; height: 58px; overflow: hidden; border: 1.5px dashed rgba(255, 255, 255, 0.5); border-radius: 10px; font-family: var(--f-titulo); font-size: 1.25rem; color: rgba(255, 255, 255, 0.7); }
+.catalogo-vaga--cheia { border: 2px solid var(--lima); }
+.catalogo-bandeja-texto { font-weight: 500; min-width: 0; }
+.catalogo-bandeja-sair { padding: 8px 6px; color: #fff; font-size: var(--t-pequeno); text-decoration: underline; text-underline-offset: 4px; }
+@keyframes catalogo-sobe { from { opacity: 0; transform: translateY(16px); } }
+
+@media (max-width: 900px) {
+  .catalogo-barra { top: 56px; margin: 0 -16px; padding: 10px 16px; }
+  .catalogo-linha1 { gap: 10px; }
+  .catalogo-abrir { display: inline-flex; align-items: center; flex: none; height: 42px; padding: 0 16px; border: 1.5px solid var(--tinta); border-radius: var(--r-pilula); color: var(--tinta); font-weight: 500; font-size: var(--t-pequeno); }
+  .catalogo-abrir[aria-expanded="true"] { background: var(--tinta); color: var(--sobre-tinta); }
+  .catalogo-conta { font-size: 0.75rem; }
+  .catalogo-conta b { font-size: 1.5rem; }
+  .catalogo-filtros { display: none; }
+  .catalogo-barra--aberta .catalogo-filtros { display: grid; grid-template-columns: 1fr 1fr; }
+  .catalogo-filtros .chip { justify-content: center; }
+  .catalogo-acoes { grid-column: 1 / -1; margin: 0; justify-content: space-between; }
+  .catalogo-bandeja { bottom: 10px; gap: 8px 10px; align-self: stretch; flex-wrap: wrap; justify-content: space-between; }
+  .catalogo-bandeja-texto { order: -1; flex-basis: 100%; padding-left: 4px; font-size: var(--t-pequeno); }
+  .catalogo-vaga { width: 34px; height: 46px; }
+}

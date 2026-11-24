@@ -1,0 +1,46 @@
+/* Coleções. Cores só por variável de tokens.css. */
+.colecoes-capas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--e7) var(--e5); }
+.colecoes-capa { display: flex; flex-direction: column; gap: var(--e2); min-width: 0; }
+.colecoes-capa-link { display: flex; flex-direction: column; gap: var(--e3); text-decoration: none; transition: transform var(--dur) var(--ease); }
+.colecoes-capa-link:hover { transform: translateY(-4px); }
+.colecoes-capa-link:hover .colecoes-mosaico { box-shadow: var(--sombra-levanta); }
+.colecoes-mosaico { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; aspect-ratio: 1; overflow: hidden; border-radius: var(--r-midia); background: var(--afundado); transition: box-shadow var(--dur) var(--ease); }
+.colecoes-mosaico > span { min-width: 0; min-height: 0; overflow: hidden; }
+.colecoes-mosaico--1 > span { grid-area: 1 / 1 / 3 / 3; }
+.colecoes-mosaico--2 > span { grid-row: 1 / 3; }
+.colecoes-mosaico--3 > span:first-child { grid-row: 1 / 3; }
+.colecoes-mosaico-vazio { grid-area: 1 / 1 / 3 / 3; display: flex; align-items: center; justify-content: center; font-size: var(--t-num); color: color-mix(in srgb, var(--texto-2) 45%, transparent); background: repeating-linear-gradient(45deg, var(--afundado) 0 10px, var(--superficie) 10px 20px); }
+.colecoes-capa-nome { font-size: 1.375rem; overflow-wrap: anywhere; }
+.colecoes-capa-pe { display: flex; align-items: center; justify-content: space-between; gap: var(--e3); flex-wrap: wrap; }
+.colecoes-capa-acoes { display: flex; gap: var(--e4); }
+.colecoes-capa-acoes button { padding: 4px 0; font-size: var(--t-pequeno); font-weight: 500; color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; }
+.colecoes-renomear { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2); }
+.colecoes-renomear .campo { flex: 1 1 100%; }
+.colecoes-confirma { display: flex; flex-direction: column; gap: var(--e3); padding: var(--e3) var(--e4); background: var(--alerta-fundo); color: var(--alerta); font-size: var(--t-pequeno); font-weight: 500; border-radius: var(--r-dado); }
+.colecoes-apagar.botao { background: var(--alerta); color: var(--alerta-fundo); }
+
+.colecoes-nova { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e4) var(--e5); padding: clamp(20px, 3.4vw, 40px); border-radius: var(--r-dado); }
+.colecoes-nova h2, .colecoes-nova > .linha, .colecoes-nova > p { grid-column: 1 / -1; }
+
+.colecoes-nota { display: flex; flex-direction: column; gap: var(--e2); max-width: 720px; }
+.colecoes-nota .linha { min-height: 32px; }
+.colecoes-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e4); }
+.colecoes-exporta-titulo { display: none; }
+[data-imprimir] .colecoes-exporta-titulo { display: block; margin-bottom: var(--e4); }
+
+/* cada post fica num invólucro que ocupa o lugar do card no mosaico, para caber o botão de remover */
+.colecoes-item { position: relative; display: flex; grid-row: span 2; min-width: 0; }
+.colecoes-item--alto { grid-row: span 3; }
+.colecoes-item--destaque { grid-column: span 2; grid-row: span 4; }
+.colecoes-item > .pc { flex: 1; }
+.colecoes-remover { position: absolute; top: 10px; left: 10px; padding: 5px 12px; border-radius: var(--r-pilula); background: var(--superficie); color: var(--texto); font-size: 0.75rem; font-weight: 500; box-shadow: var(--sombra-levanta); opacity: 0; transition: opacity var(--dur) var(--ease); }
+.colecoes-item:hover .colecoes-remover, .colecoes-remover:focus-visible { opacity: 1; }
+.colecoes-remover:hover { background: var(--alerta-fundo); color: var(--alerta); }
+@media (hover: none) { .colecoes-remover { opacity: 1; } }
+
+@media (max-width: 700px) {
+  .colecoes-capas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e6) var(--e3); }
+  .colecoes-capa-nome { font-size: 1.375rem; }
+  .colecoes-nova { grid-template-columns: minmax(0, 1fr); }
+  .colecoes-acoes .botao--g { width: 100%; height: auto; min-height: 56px; padding: 10px 20px; text-align: center; }
+}

@@ -1,0 +1,3 @@
+# Canais que entram na base mesmo sem aparecer na busca (um @handle ou ID UC... por linha).
+# Use para garantir diversidade: Sebrae, Stone/Ton, embaixadores, contas pequenas.
+@sebrae

@@ -1,0 +1,20 @@
+@Isaac Inteli
+No tapi tá "cada estudante coleta a própria base, define e justifica os critérios de seleção dos perfis e documenta o processo"
+Pensei também que seria legal um slide sobre sugestões de como fazer o primeiro levantamento da base de perfis caso a stone também nao forneca (igual ele disse que não iria), e querendo ou não a lista deles tbm está bem no "achismo" pelo q ele disse.
+Entt to levantando algumas ideias de fontes talvez para essa base:
+
+1. Pesquisa nos scrapers
+* Apify e HikerAPI: busca de perfis por palavra-chave ("MEI", "pequenos negócios", "lojista"), devolvem bio e seguidores em JSON
+* Ressalva: é scraping, só entra com aval por escrito
+
+2. Pesquisas de influenciadores
+* HypeAuditor Discovery: camada grátis com palavra-chave, categoria, faixa de seguidores e local da audiência
+* influencers.club: busca por bio grátis em modo prévia
+* Meta Creator Marketplace: oficial, grátis, mas precisa da conta de marca da Stone
+
+3. Outras fontes
+* Embaixadores Stone: Luciano Huck, Natalia Beauty, Rony Meisler, Chef Ju Lima e Alfredo Soares
+* Campanha #BreakStone, que já reúne empreendedores selecionados pela Stone com perfil de criação de conteúdo
+* Aba "seguindo" de Stone, Ton, Impulso e Sebrae
+* Reconhecimento do setor: Prêmio Microinfluenciadores Digitais (categoria Empreendedorismo), palestrantes da Semana do MEI e do Sebrae Delas, etc
+* Custom Search JSON API do Google pra automatizar pesquisas tipo site:instagram.com "para pequenos negócios"

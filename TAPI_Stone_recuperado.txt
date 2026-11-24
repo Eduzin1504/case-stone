@@ -1,0 +1,400 @@
+Mapeamento de Conteúdo de Alto Engajamento para
+Micro e Pequenos Empreendedores
+    ●​ Parceiro: Stone
+    ●​ Instituição: Inteli Academy
+    ●​ Formato: projeto individual
+    ●​ Duração estimada: 4 semanas
+
+
+1. Contexto e justificativa
+A Stone atende uma ampla base de micro e pequenos empreendedores (MPEs) em todo o
+Brasil. Para esse público, as redes sociais funcionam simultaneamente como vitrine e canal de
+venda, além de representarem um dos principais pontos de contato entre a Stone e potenciais
+clientes. Atualmente, a escolha do conteúdo publicado para esse público se apoia em intuição,
+referências pontuais ou na reprodução de formatos em alta, sem um levantamento sistemático
+do que de fato gera engajamento.
+
+O problema apresenta duas dimensões. A primeira diz respeito à própria Stone: compreender
+quais formatos, temas, perfis de criador e tipos de vídeo geram mais atenção entre MPEs
+permite produzir conteúdo para o Instagram da empresa com maior potencial de engajamento
+e captação de leads. A segunda diz respeito ao empreendedor: o mesmo mapeamento pode
+se converter em orientação prática para que o lojista fortaleça a presença digital do seu
+negócio.
+
+As métricas de engajamento são públicas. Cada publicação apresenta curtidas, comentários,
+visualizações e data de publicação, o que permite identificar as publicações de maior
+desempenho e categorizar suas características de forma estruturada. Este projeto entrega
+essa peça: uma base documentada de conteúdo voltado a MPEs, um mapeamento das
+características das publicações de maior engajamento e um agente que transforma esses
+achados em recomendações e criativos acionáveis, sempre fundamentados em publicações
+reais.
+
+Para a liga, o projeto representa a oportunidade de combinar coleta de dados por rota oficial,
+análise multimodal e agentes de IA em um problema de negócio com aplicação imediata para
+o parceiro.
+
+
+2. Objetivo
+Construir um agente capaz de identificar as publicações de maior engajamento entre micro e
+pequenos empreendedores nas redes sociais, categorizar suas características de conteúdo,
+formato e perfil de criador e, a partir disso, gerar recomendações e propostas de criativos para
+a Stone, fundamentadas em exemplos reais.
+
+Pergunta norteadora: quais características de conteúdo, formato e perfil de criador estão
+presentes nas publicações de maior engajamento voltadas a micro e pequenos
+empreendedores, e como transformar esse conhecimento em criativos para a Stone?
+
+Objetivos específicos
+
+   ●​ Coletar, documentar e analisar criticamente uma base de publicações e métricas de
+        perfis relevantes para MPEs.
+   ●​ Ranquear as publicações por engajamento e identificar as de maior desempenho.
+   ●​ Categorizar as publicações de maior desempenho a partir de uma rubrica fixa (tipo de
+        post, formato de vídeo, tema, gancho, chamada para ação e perfil do criador), com
+        extração automatizada e validação por amostragem manual.
+   ●​ Levantar as características mais recorrentes entre as publicações de maior
+        desempenho e os perfis de criadores mais presentes nesse grupo.
+   ●​ Integrar a análise a um agente que responde perguntas, gera um playbook de conteúdo
+        e propõe criativos (roteiros, legendas e ganchos) inspirados nas publicações de maior
+        desempenho.
+   ●​ Disponibilizar o fluxo como ferramenta integrável (função Python e servidor MCP).
+
+
+3. Decisões de escopo propostas (a validar no kickoff)
+ Tema          Proposta                                  Justificativa
+
+
+ Caso de       Mapear o conteúdo de maior                Demanda direta da Stone: uma ação de
+ uso           engajamento e gerar criativos para o      curto prazo, com aplicação imediata no
+               canal da Stone voltado a MPEs             Instagram para captação de leads
+
+
+ Público-alv   Micro e pequenos empreendedores           Base de clientes e potenciais clientes da
+ o do          (lojistas, prestadores de serviço e       Stone
+ conteúdo      autônomos)
+
+
+ Plataforma    Instagram (Reels e carrossel) como foco   O Instagram é o canal indicado pela
+               principal; YouTube Shorts como fonte      Stone. O YouTube Data API v3 é oficial,
+               complementar                              gratuito e permite maior volume de dados
+Coleta           Responsabilidade do estudante. Para o        O Instagram não oferece uma rota pública
+                 YouTube, via YouTube Data API v3. Para       simples para coletar conteúdo de outros
+                 o Instagram, a forma de extração será        perfis. A definição conjunta garante um
+                 definida pela organização do case e          caminho viável, padronizado e em
+                 apresentada no kickoff                       conformidade com os Termos de Serviço
+
+
+Abordagem        Coleta de métricas, ranking por              Ação de curto prazo, voltada a
+                 engajamento e categorização das              compreender e replicar o que já funciona
+                 publicações de maior desempenho, sem
+                 modelo preditivo
+
+
+Métrica de       Taxa de engajamento normalizada pelo         Sem normalização, o ranking reflete o
+ranking          tamanho do perfil: (curtidas +               número de seguidores de cada perfil, e
+                 comentários) ÷ seguidores                    não a qualidade do conteúdo
+
+
+Lead             Indicador indireto: presença e tipo de       Dados de conversão não são públicos.
+                 chamada para ação e comentários com          Caso a Stone disponibilize dados do
+                 intenção de contato ("quero", "como          próprio perfil, será possível observar a
+                 faço", "qual o link")                        conversão real
+
+
+Multimodal       Obrigatório em versão leve: thumbnail ou     Formato e gancho visual estão no centro
+                 frames, transcrição e categorias extraídas   do que a Stone busca compreender
+                 por modelo de visão e linguagem (VLM)
+                 gratuito
+
+
+Geração de       Obrigatória: roteiro, gancho, legenda e      Converte o diagnóstico em ação e gera
+criativos        chamada para ação, cada um vinculado         um entregável de aplicação direta pela
+                 às publicações que o inspiraram              equipe da Stone
+
+
+
+4. Escopo
+4.1 Dentro do escopo (núcleo obrigatório)
+
+   ●​ Coleta e base de dados documentada: origem, período, volume, perfis incluídos,
+         critérios de seleção, licença e limitações de representatividade.
+   ●​ Ranking de engajamento: métrica normalizada declarada, com definição explícita do
+         critério de alto desempenho (por exemplo, os 10% superiores da base).
+   ●​ Categorização: rubrica fixa aplicada por VLM/LLM a cada publicação de alto
+         desempenho, com validação manual de uma amostra.
+   ●​ Levantamento de características: frequência de cada categoria entre as publicações
+         de alto desempenho, recortes por tema e formato, e exemplos reais de cada categoria.
+   ●​ Perfis em destaque: relação dos criadores mais presentes entre as publicações de
+         alto desempenho, com tema e formato predominantes de cada um.
+   ●​ Agente em LangGraph com ferramentas de consulta à base, busca de publicações de
+         referência e geração de criativos.
+   ●​ Playbook de conteúdo: documento com as características identificadas, exemplos
+         reais e recomendações para a Stone.
+   ●​ Integração: fluxo disponibilizado como função Python documentada e servidor MCP,
+         com demonstração executável.
+   ●​ README com metodologia e registro das análises.
+
+
+4.2 Extensões opcionais
+
+   ●​ Comparação entre as publicações de alto desempenho e o restante da base, para
+         distinguir características associadas ao sucesso de características apenas comuns no
+         nicho.
+   ●​ Recuperação aumentada por geração (RAG) sobre as publicações de alto
+         desempenho, para fundamentar cada criativo gerado.
+   ●​ Avaliação de criativos: verificação da aderência de um rascunho às características
+         identificadas, com sugestões de ajuste.
+   ●​ Análise de comentários: classificação de intenção, dúvidas recorrentes e objeções do
+         público MPE.
+   ●​ Recorte por segmento do empreendedor (alimentação, beleza, varejo e serviços).
+   ●​ Análise de horário e frequência de publicação, com proposta de calendário editorial.
+   ●​ Versão do playbook voltada ao próprio lojista, como material educativo.
+
+
+4.3 Fora do escopo
+
+   ●​ Modelos preditivos de engajamento.
+   ●​ Publicação automática ou integração com as contas oficiais da Stone.
+   ●​ Produção final de peças (edição de vídeo e design final); o entregável consiste em
+         roteiros, briefs e criativos em versão preliminar.
+   ●​ Gestão de mídia paga ou otimização de campanhas de anúncio.
+   ●​ Acesso a dados internos de clientes da Stone sem autorização formal.
+   ●​ Coleta por scraping ou por qualquer rota que viole os Termos de Serviço das
+         plataformas.
+
+
+5. Dados
+A coleta é responsabilidade de cada estudante, que deve definir e justificar os critérios de
+seleção dos perfis e documentar todo o processo. A forma de extração dos dados do
+Instagram será definida pela organização do case e apresentada no kickoff, acompanhada das
+orientações de uso. A base deve estar concluída até o fim da primeira semana, para que o
+restante do projeto se concentre na categorização e na geração de criativos.
+
+ Fonte            Papel             Detalhes
+
+
+ Instagram        Fonte principal   Perfis públicos voltados a MPEs: criadores de conteúdo sobre
+                                    empreendedorismo, educação financeira e marketing para
+                                    pequenos negócios, além de bancos, fintechs e marcas do setor.
+                                    Dados esperados: legenda, tipo de mídia, data, curtidas,
+                                    comentários e número de seguidores. A rota de extração será
+                                    definida e apresentada no kickoff
+ YouTube        Fonte              Canais do mesmo nicho: título, descrição, tags, duração, data,
+ Shorts         complementar       inscritos, visualizações, curtidas, comentários e thumbnail.
+ (Data API                         Recomenda-se o uso de playlists de canais (1 unidade de cota) em
+ v3)                               vez de buscas (100 unidades)
+
+
+ Instagram      Opcional,          Alcance, salvamentos, compartilhamentos, cliques no link e visitas
+ da Stone       mediante           ao perfil. Permite observar o indicador de leads com dados reais
+ (Insights)     disponibilização
+
+Volume de referência: 2.000 a 5.000 publicações de pelo menos 30 perfis, com data de coleta
+registrada e apenas publicações com no mínimo 14 dias (métricas estabilizadas).
+
+Critérios de seleção recomendados: público declaradamente MPE, atividade regular nos
+últimos 12 meses e diversidade de tamanho de conta (pequena, média e grande), a fim de
+evitar viés de seleção em favor de perfis de grande alcance.
+
+
+6. Formulação do problema
+6.1 Métrica e critério de alto desempenho
+ Elemento         Definição recomendada
+
+
+ Métrica          Taxa de engajamento: (curtidas + comentários) ÷ seguidores
+ principal
+
+
+ Alto             10% superiores da base segundo a métrica principal (critério declarado no
+ desempenho       README)
+
+
+ Análise          Frequência de cada categoria entre as publicações de alto desempenho; recortes
+                  por tema e formato
+
+
+ Indicador de     Presença de chamada para ação e comentários com intenção de contato
+ lead
+
+
+ Validação        Concordância entre a categorização automática e uma amostra categorizada
+                  manualmente (mínimo de 50 publicações)
+
+
+6.2 Rubrica de categorização (resposta exclusivamente em JSON)
+O VLM/LLM responde a um JSON fixo por publicação, organizado por tema. Campos
+terminados em 0a10 correspondem a notas de 0 a 10.
+
+   ●​ Formato: tipo_post (reels | carrossel | imagem | short), duracao_faixa, formato_video
+       (talking head | tutorial | bastidores | antes/depois | humor/esquete | depoimento |
+       lista/dicas | trend)
+   ●​ Gancho: hook_primeiros_3s (texto curto), tipo_hook (pergunta | promessa | dor |
+       número | polêmica | curiosidade), forca_hook_0a10
+   ●​ Tema: tema_principal (vendas | finanças | marketing | atendimento | gestão | motivação
+         | ferramentas/maquininha | história de empreendedor)
+   ●​ Pessoas: tem_rosto, criador_e_empreendedor_real, prova_social
+   ●​ Texto e edição: texto_na_tela, legenda_tamanho, ritmo_cortes_0a10
+   ●​ Linguagem: tom (informal | técnico | inspiracional | humorístico),
+         usa_linguagem_regional, clareza_mensagem_0a10
+   ●​ Conversão: tem_cta, tipo_cta (comentar | salvar | link na bio | DM | seguir),
+         oferta_ou_beneficio_explicito
+   ●​ Síntese: elementos_top5
+
+
+6.3 Níveis de ambição
+ Nível             O que inclui                                    Custo e risco
+
+
+ 1. Mínimo         Coleta, ranking normalizado, categorização      Sem custo. Executável em Colab
+ (obrigatório)     por LLM a partir de legenda e thumbnail e       gratuito
+                   playbook gerado pelo agente
+
+
+ 2.                Nível 1, acrescido de frames e transcrição de   Sem custo dentro dos limites
+ Recomendado       vídeo, aplicação da rubrica completa por VLM    gratuitos. Risco de limitação de
+                   e geração de criativos vinculados às            requisições, com alternativa em
+                   publicações de referência                       modelo local
+
+
+ 3. Avançado       Nível 2, acrescido de comparação com o          Maior tempo de processamento.
+                   restante da base, RAG sobre as publicações      Recomendado apenas após a
+                   de alto desempenho e análise de intenção        estabilização do nível 2
+                   nos comentários
+
+
+6.4 Riscos e cuidados conhecidos
+
+   ●​ A rota de extração do Instagram será definida no kickoff. Independentemente da rota
+         adotada, é provável que haja limites de requisição, de modo que a coleta deve prever
+         cache e reenvio com intervalo (backoff) desde o início.
+   ●​ Viés de sobrevivência: perfis grandes e de alto alcance são mais fáceis de encontrar. A
+         amostra deve incluir contas menores.
+   ●​ O ranking por métrica absoluta favorece contas grandes. A métrica normalizada deve
+         ser utilizada em todas as análises.
+   ●​ Características recorrentes nas publicações de alto desempenho não garantem
+         resultado. O playbook deve apresentá-las como padrões observados, acompanhados
+         de exemplos.
+   ●​ Os limites gratuitos de modelos de visão e linguagem podem mudar sem aviso.
+         Recomenda-se prever tratamento para erros de limite (código 429) e uma alternativa
+         local.
+
+
+7. Arquitetura de referência
+O fluxo de referência segue as etapas abaixo:
+   1.​ Entrada: pergunta, objetivo ou solicitação de criativo.
+   2.​ Agente orquestrador (LangGraph), que decide quais ferramentas acionar.
+   3.​ Ferramentas: consulta à base (ranking e filtros por tema, formato e perfil); publicações
+        de referência (alto desempenho, semelhantes à solicitação); geração de criativos
+        (roteiro, gancho, legenda e chamada para ação).
+   4.​ Saída: recomendação ou criativo, acompanhado das publicações de referência e da
+        justificativa.
+   5.​ Registro das execuções.
+
+A arquitetura pode adotar um agente único ou componentes especializados. O requisito
+indispensável é a rastreabilidade: quem analisa o resultado deve conseguir identificar em quais
+publicações reais cada recomendação se apoia. O LLM orquestra, interpreta e redige, mas os
+dados apresentados provêm sempre da base coletada.
+
+Contrato mínimo da ferramenta
+Entrada
+
+   ●​ mode: analisar | recomendar | gerar_criativo
+   ●​ query: pergunta ou objetivo (ex.: "quais formatos de Reels mais aparecem entre as
+        publicações de alto desempenho de pequenos negócios de alimentação?")
+   ●​ segment: recorte de público ou setor do empreendedor (opcional)
+   ●​ filters: plataforma, período e tamanho de perfil (opcional)
+
+Saída
+
+   ●​ findings: características mais recorrentes entre as publicações de alto desempenho,
+        com respectivas frequências
+   ●​ reference_posts: publicações utilizadas como referência (link, métrica e categorias)
+   ●​ creatives: propostas geradas (gancho, roteiro, legenda e chamada para ação), cada
+        uma vinculada às publicações que a inspiraram
+   ●​ confidence_flag: sinalização quando a característica se apoia em um número reduzido
+        de publicações
+   ●​ explanation: justificativa em linguagem natural
+
+Entradas e saídas validadas com Pydantic.
+
+
+8. Tecnologias recomendadas
+A referência de viabilidade são modelos abertos, execução local e ferramentas gratuitas.
+Nenhuma tecnologia é obrigatória, e as escolhas devem ser justificadas no README.
+
+ Camada              Recomendação                                           Alternativas
+ Coleta                 Instagram: rota definida no kickoff. YouTube:             Dados de Insights
+                        google-api-python-client (YouTube Data API v3) e yt-dlp   da Stone
+                        para mídia de vídeos públicos
+
+
+ Dados                  pandas, Parquet, SQLite                                   DuckDB, Supabase
+                                                                                  (plano gratuito)
+
+
+ Multimodal             faster-whisper, Gemini Flash-Lite (plano gratuito) ou     SmolVLM2, Gemma
+                        Qwen2.5-VL local                                          multimodal
+
+
+ Agente                 LangGraph + LangChain                                     Pydantic AI,
+                                                                                  smolagents
+
+
+ Integração             Função Python + servidor MCP (FastMCP)                    FastAPI
+
+
+ Análise e              pandas, Plotly                                            Matplotlib, Seaborn
+ visualização
+
+
+ Demonstração           Streamlit ou Gradio (opcional)                            Notebook
+                                                                                  executável
+
+
+
+9. Cronograma
+O cronograma de aulas e mentorias da liga será divulgado separadamente após o kickoff. As
+datas fixas do projeto são:
+
+   ●​ 26/10/2026: Kickoff com a Stone (alinhamento de escopo, definição da rota de extração
+          do Instagram e esclarecimento de dúvidas) - 15Hrs ou 16hrs
+   ●​ 25/11/2026: Apresentação e entrega final (Presencial na Stone)
+
+
+10. Entregáveis
+   ●​ Base de dados: coletada pelo estudante, documentada, com critérios de seleção e
+          limitações.
+   ●​ Mapeamento das publicações de alto desempenho: ranking normalizado,
+          categorização validada, características mais recorrentes e perfis em destaque.
+   ●​ Agente em funcionamento: responde a perguntas sobre engajamento e gera
+          recomendações e criativos vinculados a publicações de referência; disponibilizado
+          como função e servidor MCP.
+   ●​ Playbook de conteúdo para a Stone: características identificadas, perfis em
+          destaque, formatos recomendados, exemplos reais e no mínimo cinco propostas de
+          criativo prontas para produção.
+   ●​ Demonstração: executável, apresentando análise, referências, criativo gerado e
+          justificativa.
+   ●​ README: problema e recorte; base de dados (origem, período, licença e limitações);
+          arquitetura; instalação e execução; modelos e configurações; metodologia; resultados;
+     limitações; possibilidades de evolução.
+
+
+11. Critérios gerais de avaliação
+  ●​ Qualidade e documentação da coleta e da base de dados.
+  ●​ Coerência técnica da solução.
+  ●​ Consistência da categorização e rigor quanto ao que os dados efetivamente sustentam.
+  ●​ Aplicabilidade das recomendações e dos criativos para a Stone.
+  ●​ Tratamento de limitações, vieses e riscos.
+  ●​ Reprodutibilidade.
+  ●​ Qualidade da demonstração.
+
+
+12. Materiais de apoio
+  ●​ Understanding Virality: A Rubric-based VLM Framework for Short-Form
+     Edutainment Evaluation (arXiv:2512.21402): extração de atributos de vídeos curtos
+     com VLM a partir de rubrica.
+  ●​ Documentação: YouTube Data API v3, LangGraph e Model Context Protocol. A
+     documentação da rota de extração do Instagram será compartilhada no kickoff.
+  ●​ Ferramentas: faster-whisper, Qwen2.5-VL e Gemini API (compreensão de vídeo e
+     limites de uso).

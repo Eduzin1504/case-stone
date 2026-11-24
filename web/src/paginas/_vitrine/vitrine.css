@@ -1,0 +1,18 @@
+.vit-tipo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--e6); align-items: end; }
+.vit-cores { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--e3); }
+.vit-cores li { display: flex; flex-direction: column; gap: 6px; }
+.vit-cores i { display: block; height: 52px; border-radius: var(--r-dado); border: 1px solid var(--linha); }
+.vit-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--e4); align-items: start; }
+.vit-largo { grid-column: 1 / -1; }
+.vit-identidade { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--e7); align-items: center; }
+.vit-lima { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--e6); align-items: center; }
+.vit-compactos { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: var(--e4); }
+.vit-linhas { max-width: 760px; }
+.vit-celulares { display: flex; flex-wrap: wrap; gap: var(--e5); }
+.vit-celulares figure { display: flex; flex-direction: column; align-items: center; gap: var(--e2); }
+.vit-celulares figcaption { font-family: var(--f-mono); font-size: var(--t-mono); color: var(--texto-2); }
+.vit-estados { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--e5); }
+.vit-exportavel { display: flex; flex-direction: column; gap: var(--e4); max-width: 640px; padding: var(--e5); background: var(--superficie); border-radius: var(--r-dado); }
+@media (max-width: 900px) {
+  .vit-identidade, .vit-lima, .vit-estados { grid-template-columns: minmax(0, 1fr); gap: var(--e5); }
+}

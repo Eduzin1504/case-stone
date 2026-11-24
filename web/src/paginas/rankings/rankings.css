@@ -1,0 +1,77 @@
+/* /rankings: corrida de barras */
+.rankings-controles { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e3) var(--e4); }
+.rankings-pista { display: flex; flex-direction: column; gap: var(--e3); background: var(--fundo); transition: opacity var(--dur); }
+.rankings-pista[aria-busy="true"] { opacity: 0.6; }
+.rankings-recorte { color: var(--texto-2); }
+.rankings-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.rankings-item { border-bottom: 1px solid var(--linha); border-radius: var(--r-dado); }
+.rankings-item--1 { border-bottom: 0; margin-bottom: var(--e3); }
+
+.rankings-linha { position: relative; display: grid; grid-template-columns: 56px auto minmax(0, 1fr) auto; align-items: center; gap: var(--e4); padding: 10px var(--e3); color: inherit; text-decoration: none; transition: background-color var(--dur); }
+.rankings-linha:hover { background: var(--afundado); }
+.rankings-pos { font-family: var(--f-titulo); font-size: 1.375rem; line-height: 1; text-align: right; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.rankings-fotos { display: flex; }
+.rankings-foto { display: block; width: 44px; height: 58px; overflow: hidden; border-radius: 10px; background: var(--afundado); transition: transform var(--dur) var(--ease); }
+.rankings-fotos--trio .rankings-foto { width: 36px; height: 48px; box-shadow: 0 0 0 2px var(--fundo); }
+.rankings-fotos--trio .rankings-foto + .rankings-foto { margin-left: -12px; }
+.rankings-linha:hover .rankings-foto { transform: translateY(-3px); }
+.rankings-corpo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rankings-nome { font-weight: 600; }
+.rankings-sub { font-size: var(--t-pequeno); color: var(--texto-2); }
+.rankings-trilho { display: block; height: 10px; margin-top: 6px; background: var(--trilho); border-radius: var(--r-dado); overflow: hidden; }
+.rankings-barra { display: block; height: 100%; background: var(--dados); border-radius: var(--r-dado); transition: width var(--dur-dados) var(--ease); }
+.rankings-valor { min-width: 4.2em; text-align: right; font-family: var(--f-titulo); font-size: 1.375rem; line-height: 1; color: var(--tinta); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rankings-carimbo { display: none; }
+
+/* pódio: 2º e 3º um degrau acima; o 1º é o bloco lima da dobra */
+.rankings-item--podio .rankings-linha { padding-block: 16px; }
+.rankings-item--podio .rankings-pos, .rankings-item--podio .rankings-valor { font-size: var(--t-num); }
+.rankings-item--podio .rankings-foto { width: 58px; height: 76px; }
+.rankings-item--podio .rankings-fotos--trio .rankings-foto { width: 48px; height: 64px; }
+.rankings-item--podio .rankings-nome { font-size: 1.125rem; }
+.rankings-item--podio .rankings-trilho { height: 14px; }
+.rankings-item--podio .rankings-barra { background: var(--tinta); }
+.rankings-item--podio .rankings-pos { display: flex; justify-content: flex-end; }
+
+.rankings-item--1 .rankings-linha { grid-template-columns: 72px auto minmax(0, 1fr) auto; gap: var(--e5); padding: var(--e4) var(--e5) var(--e4) var(--e3); }
+.rankings-item--1 .rankings-linha:hover { background: transparent; }
+.rankings-item--1 .rankings-pos { font-size: var(--t-num); }
+.rankings-item--1 .rankings-valor { font-size: var(--t-mega); }
+.rankings-item--1 .rankings-foto { width: 72px; height: 96px; border-radius: 12px; }
+.rankings-item--1 .rankings-fotos--trio .rankings-foto { width: 66px; height: 88px; box-shadow: 0 0 0 3px var(--lima); }
+.rankings-item--1 .rankings-fotos--trio .rankings-foto + .rankings-foto { margin-left: -26px; }
+.rankings-item--1 .rankings-nome { font-weight: 600; font-size: 1.25rem; line-height: 1.25; }
+.rankings-item--1 .rankings-sub { font-size: var(--t-corpo); }
+.rankings-item--1 .rankings-trilho { height: 14px; margin-top: 8px; background: var(--afundado); }
+.rankings-item--1 .rankings-barra { background: var(--tinta); }
+.rankings-item--1 .rankings-carimbo { display: inline-flex; position: absolute; top: -18px; right: 18px; background: var(--lima); }
+
+.rankings-nota { max-width: 70ch; }
+.rankings-numeros summary { list-style: none; cursor: pointer; width: fit-content; }
+.rankings-numeros summary::-webkit-details-marker { display: none; }
+.rankings-numeros[open] summary { margin-bottom: var(--e4); }
+.rankings-numeros { overflow-x: auto; }
+.rankings-numeros .tabela { width: 100%; }
+.rankings-numeros a { color: inherit; }
+
+@media (max-width: 640px) {
+  .rankings-linha { grid-template-columns: 26px auto minmax(0, 1fr); gap: var(--e3); padding-inline: 4px; }
+  .rankings-pos { font-size: 1.375rem; }
+  .rankings-valor { grid-column: 3; grid-row: 1; justify-self: end; align-self: start; min-width: 0; font-size: 1.25rem; padding-left: 8px; background: inherit; }
+  .rankings-corpo { grid-column: 3; grid-row: 1; padding-right: 4.6em; }
+  .rankings-trilho { margin-right: -4.6em; }
+  .rankings-item--podio .rankings-linha { grid-template-columns: 44px auto minmax(0, 1fr); }
+  .rankings-item--podio .rankings-pos .carimbo { width: 42px !important; height: 42px !important; font-size: 13px !important; }
+  .rankings-item--podio .rankings-valor { font-size: 1.5rem; }
+  .rankings-item--podio .rankings-corpo { padding-right: 5.4em; }
+  .rankings-item--podio .rankings-trilho { margin-right: -5.4em; }
+  .rankings-item--1 .rankings-linha { grid-template-columns: auto minmax(0, 1fr); gap: var(--e3) var(--e4); padding: var(--e5) var(--e4) var(--e4); }
+  .rankings-item--1 .rankings-pos { display: none; }
+  .rankings-item--1 .rankings-fotos { grid-column: 1; grid-row: 1; }
+  .rankings-item--1 .rankings-foto { width: 66px; height: 88px; }
+  .rankings-item--1 .rankings-fotos--trio .rankings-foto { width: 60px; height: 80px; }
+  .rankings-item--1 .rankings-valor { grid-column: 2; grid-row: 1; align-self: end; justify-self: start; font-size: var(--t-mega); padding: 0; }
+  .rankings-item--1 .rankings-corpo { grid-column: 1 / -1; grid-row: 2; padding-right: 0; }
+  .rankings-item--1 .rankings-trilho { margin-right: 0; }
+  .rankings-item--1 .rankings-carimbo { top: -14px; right: 10px; }
+}

@@ -1,0 +1,56 @@
+/* AppShell: barra lateral (bloco floresta), topo e gaveta em telas estreitas, área de conteúdo. */
+.shell { min-height: 100vh; }
+.pular { position: fixed; z-index: 100; left: 12px; top: -60px; padding: 10px 16px; background: var(--lima); color: #00442f; font-weight: 600; border-radius: var(--r-pilula); }
+.pular:focus { top: 12px; }
+
+/* Marca: Fora da Curva + Impulso Stone. Empilhada no menu lateral; em linha (marca--linha) na barra do celular e na porta. */
+.marca { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.marca-fdc { display: block; height: 44px; width: auto; overflow: visible; }
+.marca-impulso { display: block; height: 30px; width: auto; }
+.marca--linha { flex-direction: row; align-items: center; gap: 12px; }
+.marca--linha .marca-fdc { height: 32px; }
+.marca--linha .marca-impulso { height: 28px; padding-left: 12px; box-sizing: content-box; border-left: 1.5px solid rgb(255 255 255 / .3); }
+.marca--escura.marca--linha .marca-impulso { border-left-color: rgb(0 65 50 / .3); }
+
+.shell-lateral { position: fixed; z-index: 40; inset: 0 auto 0 0; width: var(--lateral-l); display: flex; flex-direction: column; gap: var(--e4); padding: 22px 16px 16px 20px; overflow-y: auto; background: var(--lateral-fundo); color: var(--lateral-texto); }
+.shell-marca { text-decoration: none; align-self: flex-start; }
+
+.shell-foco { display: flex; align-items: flex-start; gap: 10px; margin-left: -6px; padding: 10px 12px; background: var(--lateral-ativo); border-radius: 12px; text-decoration: none; transition: transform var(--dur) var(--ease); }
+.shell-foco:hover { transform: translateY(-1px); }
+.shell-foco-letra { font-family: var(--f-titulo); font-size: 2rem; line-height: 1; color: var(--lima); }
+.shell-foco-texto { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.shell-foco-nome { font-weight: 600; font-size: 0.8125rem; line-height: 1.25; color: var(--lateral-forte); }
+.shell-foco-base { font-family: var(--f-mono); font-size: 0.6875rem; line-height: 1.4; }
+.shell-foco-trocar { margin-top: 3px; font-size: 0.75rem; font-weight: 500; color: var(--lima); }
+.shell-foco:hover .shell-foco-trocar { text-decoration: underline; text-underline-offset: 3px; }
+
+.shell-nav { display: flex; flex-direction: column; gap: var(--e3); }
+.shell-grupo { margin: 0 0 6px 14px; font: 500 0.6875rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; opacity: 0.6; }
+.shell-nav > div + div { padding-top: var(--e3); border-top: 1px solid rgb(255 255 255 / .08); }
+.shell-metodo { font-size: 0.8125rem; font-weight: 500; color: var(--lateral-forte); text-decoration: none; padding: 4px 10px; margin-left: -10px; border-radius: var(--r-pilula); }
+.shell-metodo:hover { background: var(--lateral-ativo); }
+.shell-nav ul { display: flex; flex-direction: column; gap: 1px; margin-left: -2px; }
+.shell-link { display: block; padding: 6px 14px; font-size: 0.9375rem; border-radius: var(--r-pilula); color: var(--lateral-forte); font-weight: 500; text-decoration: none; transition: background-color var(--dur), color var(--dur); }
+.shell-link:hover { background: var(--lateral-ativo); }
+.shell-link--ativo { background: var(--lateral-ativo); color: var(--lima); }
+
+.shell-pe { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding-top: var(--e4); }
+.shell-aviso { font-family: var(--f-mono); font-size: 0.6875rem; line-height: 1.4; color: var(--lima); }
+.shell-credito { font-size: 0.6875rem; line-height: 1.4; }
+
+.shell-topo { display: none; }
+.shell-veu { position: fixed; inset: 0; z-index: 35; background: rgba(7, 20, 14, 0.5); }
+
+.shell-conteudo { margin-left: var(--lateral-l); min-height: 100vh; padding: 44px clamp(24px, 4vw, 56px) 120px; }
+.shell-conteudo:focus { outline: none; box-shadow: none; }
+.shell-pagina { display: flex; flex-direction: column; gap: var(--e7); max-width: var(--pagina-max); margin: 0 auto; }
+
+@media (max-width: 900px) {
+  .shell-topo { position: fixed; z-index: 30; inset: 0 0 auto 0; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 16px; background: var(--lateral-fundo); }
+  .shell-topo a { text-decoration: none; }
+  .shell-menu { height: 36px; padding: 0 16px; border-radius: var(--r-pilula); border: 1.5px solid var(--lateral-forte); color: var(--lateral-forte); font-weight: 500; font-size: var(--t-pequeno); }
+  .shell-lateral { width: min(300px, 86vw); transform: translateX(-102%); visibility: hidden; transition: transform 0.28s var(--ease), visibility 0s 0.28s; }
+  .shell-lateral--aberta { transform: none; visibility: visible; transition: transform 0.28s var(--ease); box-shadow: 24px 0 60px -20px rgba(0, 0, 0, 0.6); }
+  .shell-conteudo { margin-left: 0; padding: 84px 16px 96px; }
+  .shell-pagina { gap: var(--e6); }
+}

@@ -1,0 +1,44 @@
+/* Busca por ideia: campo grande, exemplos em bloco lima, resultados com a força do casamento. */
+.busca-form { display: flex; align-items: center; gap: var(--e3); }
+.busca-campo { flex: 1; }
+.busca-form input.campo-entrada--g { height: 72px; font-size: 1.25rem; border-width: 2px; border-color: var(--tinta); }
+
+.busca-exemplos { display: flex; flex-direction: column; gap: var(--e4); padding: clamp(20px, 3.4vw, 44px); border-radius: var(--r-dado); }
+.busca-exemplos ul { display: flex; flex-direction: column; }
+.busca-exemplos button { display: flex; align-items: baseline; justify-content: space-between; gap: var(--e4); width: 100%; padding: 12px 0 8px; border-top: 1.5px solid var(--linha); text-align: left; font-size: 1.125rem; font-weight: 500; line-height: 1.3; color: var(--tinta); }
+.busca-exemplos button span { transition: transform var(--dur) var(--ease); }
+.busca-exemplos button:hover span:first-child { transform: translateX(14px); }
+.busca-exemplos button:hover span:last-child { transform: translateX(-10px); }
+
+.busca-chips { gap: 8px; }
+.busca-resultados { display: flex; flex-direction: column; gap: var(--e5); }
+.busca-conta { color: var(--texto-2); }
+.busca-conta b { font-family: var(--f-titulo); font-weight: 400; font-size: var(--t-num); line-height: 1; color: var(--tinta); margin-right: 6px; }
+
+.busca-primeiros { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 28px 20px; align-items: start; }
+.busca-primeiros li { position: relative; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.busca-posicao { position: absolute; z-index: 2; left: -8px; top: -14px; display: grid; place-items: center; min-width: 40px; height: 44px; padding: 0 8px; background: var(--tinta); color: var(--sobre-tinta); font-family: var(--f-titulo); font-size: 1.375rem; line-height: 1; border-radius: var(--r-dado); pointer-events: none; }
+.busca-primeiros li:first-child .busca-posicao { min-width: 56px; height: 62px; font-size: var(--t-num); }
+.busca-primeiros li:first-child .pc-criador { font-size: 1rem; }
+
+.busca-lista { display: flex; flex-direction: column; }
+.busca-lista li { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; column-gap: var(--e5); border-bottom: 1px solid var(--linha); }
+.busca-lista .pc--linha { border-bottom: 0; }
+
+.busca-casou { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; min-width: 0; }
+.busca-forca { display: block; height: 10px; background: var(--trilho); border-radius: 2px; overflow: hidden; }
+.busca-forca-barra { display: block; height: 100%; background: var(--dados); border-radius: 2px; transform-origin: left; transition: transform var(--dur-dados) var(--ease); }
+.busca-forca-num { font-family: var(--f-titulo); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.busca-palavras { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; font-size: 0.75rem; }
+.busca-palavras mark { padding: 1px 6px; background: var(--afundado); color: var(--texto); font-weight: 500; border-radius: var(--r-dado); }
+
+@media (max-width: 900px) {
+  .busca-primeiros { grid-template-columns: 1fr 1fr; }
+  .busca-lista li { grid-template-columns: minmax(0, 1fr); padding-bottom: 10px; }
+  .busca-lista .busca-casou { padding: 0 8px; }
+}
+@media (max-width: 520px) {
+  .busca-form { flex-direction: column; align-items: stretch; }
+  .busca-form input.campo-entrada--g { height: 60px; font-size: 1rem; padding: 0 20px; }
+  .busca-posicao { left: -4px; top: -10px; }
+}

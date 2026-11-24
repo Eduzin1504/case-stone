@@ -1,0 +1,7 @@
+httpx
+pandas
+python-dotenv
+pydantic
+google-genai
+langgraph
+mcp

@@ -1,0 +1,84 @@
+/* Fonte única do sistema visual. Cores SEMPRE por variável; nunca hex solto nas páginas.
+   Só tema claro (o escuro foi retirado a pedido do usuário).
+   Escala tipográfica (razão ~1,25): corpo 15px · h3 17px · h2 22px · número secundário 26px · h1 36px (28px no celular)
+   · número de destaque até 52px (um por dobra). Anton só em títulos e números de destaque. */
+:root {
+  /* marca (fixas nos dois temas) */
+  --floresta: #00442f;
+  --lima: #c7f93c; /* lima oficial da Impulso Stone */
+  --lima-suave: #d9ff66;
+  --dados: #1f9e55;        /* barras e marcas de dados (não usar em texto pequeno) */
+  --magenta: #b02d63;      /* só "contradito", alerta e nota baixa */
+
+  /* superfícies e texto */
+  --fundo: #f4f7f4;
+  --superficie: #ffffff;
+  --afundado: #e9efea;
+  --texto: #14231b;
+  --texto-2: #536359;
+  --linha: #dbe4dd;
+
+  /* tinta: cor de títulos, números e botão primário. */
+  --tinta: #004132; /* sherwood oficial */
+  --sobre-tinta: #ffffff;  /* texto sobre fundo --tinta */
+  --sobre-lima: #004132;   /* texto sobre --lima: sempre floresta */
+  --dados-texto: #14753d;  /* verde legível como texto */
+  --alerta: #b02d63;       /* magenta legível como texto */
+  --alerta-fundo: #f9e4ec;
+  --controle: #9fb0a5;     /* barra do grupo de controle */
+  --trilho: #e2e9e4;       /* fundo de barras */
+
+  /* comprovante: o papel continua papel nos dois temas */
+  --papel: #fbf8ec;
+  --papel-tinta: #23271f;
+  --papel-linha: #cfc9b3;
+
+  /* barra lateral: bloco floresta */
+  --lateral-fundo: #004132;
+  --lateral-texto: #c4dccd;
+  --lateral-forte: #ffffff;
+  --lateral-linha: #1a5c45;
+  --lateral-ativo: #0d5a41;
+
+  /* moldura do celular */
+  --aparelho: #10201a;
+
+  /* tipografia */
+  --f-titulo: "Anton", "Arial Narrow", Impact, sans-serif;
+  --f-texto: "Lexend", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --t-mega: clamp(2.5rem, 4.4vw, 3.25rem);   /* número de destaque: um por dobra */
+  --t-h1: clamp(1.75rem, 3.2vw, 2.25rem);    /* título de página */
+  --t-h2: 1.375rem;                         /* título de seção (Anton) */
+  --t-num: 1.625rem;                        /* número secundário */
+  --t-h3: 1.0625rem;                       /* subtítulo (Lexend 600) */
+  --t-corpo: 0.9375rem;
+  --t-pequeno: 0.8125rem;
+  --t-mono: 0.75rem;
+
+  /* forma: mídia e botões redondos; dados retos */
+  --r-midia: 14px;
+  --r-pilula: 999px;
+  --r-dado: 3px;
+
+  /* espaço */
+  --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e5: 24px; --e6: 32px; --e7: 56px; --e8: 80px;
+
+  /* sombras: só onde têm função (elevação no hover, painel sobre a grade) */
+  --sombra-levanta: 0 14px 28px -12px rgba(0, 40, 26, 0.35);
+  --sombra-painel: -24px 0 60px -20px rgba(0, 30, 20, 0.35);
+  --sombra-ficha: 0 18px 40px -14px rgba(0, 30, 20, 0.4);
+
+  /* movimento: ease-out, sem bounce */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.18s;
+  --dur-dados: 0.6s;
+
+  /* medidas do shell */
+  --lateral-l: 228px;
+  --painel-l: 620px;
+  --pagina-max: 1320px;
+
+  color-scheme: light;
+}

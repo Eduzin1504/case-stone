@@ -1,0 +1,83 @@
+/* passos da régua */
+.metodo-passos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e5); counter-reset: passo; }
+.metodo-passo { position: relative; display: flex; flex-direction: column; gap: var(--e2); padding-top: var(--e4); border-top: 2px solid var(--tinta); }
+.metodo-passo + .metodo-passo::before { content: "→"; position: absolute; top: -15px; left: calc(-1 * var(--e5)); width: var(--e5); text-align: center; font-weight: 600; color: var(--tinta); background: var(--fundo); }
+.metodo-passo-num { font-family: var(--f-titulo); font-size: var(--t-num); line-height: 0.85; color: var(--tinta); }
+.metodo-passo-desenho { height: 84px; padding: 10px 12px; margin: var(--e2) 0; background: var(--superficie); border-radius: var(--r-dado); }
+.metodo-passo-desenho svg { display: block; height: 100%; width: 100%; }
+.metodo-d-txt { font-family: var(--f-texto); font-size: 9.5px; font-weight: 500; fill: var(--texto); }
+.metodo-d-traco { stroke: var(--texto-2); stroke-width: 1.5; }
+.metodo-d-salto { stroke: var(--tinta); stroke-width: 2; }
+.metodo-d-apagado { fill: var(--controle); }
+.metodo-d-forte { fill: var(--dados); }
+.metodo-d-vazado { fill: none; stroke: var(--controle); stroke-width: 1.5; stroke-dasharray: 3 2; }
+.metodo-regua .secao-cab { align-items: center; }
+
+/* números da base */
+.metodo-numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--e7); }
+.metodo-plataforma { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.metodo-plataforma-nome { font-size: 1.25rem; margin-bottom: var(--e2); }
+.metodo-mega { font-size: var(--t-mega); }
+.metodo-menores { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: var(--e4) var(--e5); margin-top: var(--e5); padding-top: var(--e4); border-top: 1px solid var(--linha); }
+.metodo-menor { display: flex; flex-direction: column; gap: 2px; }
+.metodo-menor dd { font-family: var(--f-titulo); font-size: var(--t-num); line-height: 1; color: var(--tinta); text-transform: uppercase; }
+.metodo-menor dt { font-size: var(--t-pequeno); color: var(--texto-2); }
+.metodo-menor--largo { grid-column: 1 / -1; }
+.metodo-menor--largo dd { font-size: 1.375rem; }
+
+/* kappa */
+.metodo-kappa { display: flex; flex-direction: column; max-width: 980px; }
+.metodo-k { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) 64px minmax(0, 0.8fr); align-items: center; gap: var(--e4); padding: 11px 0; border-bottom: 1px solid var(--linha); }
+.metodo-k-nome { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-weight: 500; }
+.metodo-k-aviso { padding: 1px 7px; border-radius: var(--r-dado); background: var(--alerta-fundo); color: var(--alerta); font-size: 0.75rem; font-weight: 500; }
+.metodo-k-trilho { position: relative; height: 16px; background: var(--trilho); border-radius: 2px; }
+.metodo-k-barra { position: absolute; top: 0; bottom: 0; background: var(--dados); border-radius: 2px; transition: transform var(--dur-dados) var(--ease); }
+.metodo-k--fraco .metodo-k-barra { background: var(--magenta); }
+.metodo-k-zero, .metodo-k-limite { position: absolute; top: -4px; bottom: -4px; width: 0; }
+.metodo-k-zero { border-left: 1.5px solid var(--texto-2); }
+.metodo-k-limite { border-left: 1.5px dashed var(--alerta); }
+.metodo-k-num { text-align: right; font-family: var(--f-titulo); font-size: 1.375rem; line-height: 1; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.metodo-k--fraco .metodo-k-num { color: var(--alerta); }
+.metodo-legenda { display: flex; flex-direction: column; gap: 6px; font-size: var(--t-pequeno); color: var(--texto-2); max-width: 980px; }
+.metodo-legenda span { display: flex; align-items: baseline; gap: 8px; }
+.metodo-amostra { flex: none; width: 16px; height: 10px; background: var(--dados); border-radius: 2px; }
+.metodo-amostra--limite { width: 0; height: 14px; margin: 0 8px; background: none; border-left: 1.5px dashed var(--alerta); border-radius: 0; }
+
+/* avaliação */
+.metodo-aviso { padding: var(--e3) var(--e4); background: var(--afundado); border-radius: var(--r-dado); font-size: var(--t-pequeno); }
+.metodo-resumo { display: flex; flex-direction: column; counter-reset: r; max-width: 86ch; }
+.metodo-resumo li { counter-increment: r; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--e3); padding: var(--e3) 0; border-top: 1px solid var(--linha); }
+.metodo-resumo li::before { content: counter(r); font-family: var(--f-titulo); font-size: var(--t-num); line-height: 1; color: var(--tinta); }
+.metodo-resumo li:first-child { font-size: 1.0625rem; }
+.metodo-abre { overflow: hidden; }
+.metodo-md { padding-top: var(--e4); max-width: 100%; }
+.metodo-md > * { max-width: 86ch; }
+.metodo-md > .md-tabela { max-width: 100%; }
+
+/* limitações */
+.metodo-limites { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: var(--e7); align-items: start; }
+.metodo-limites > .comprovante-sombra { position: sticky; top: var(--e5); }
+.metodo-limites-indice { display: flex; flex-direction: column; gap: 6px; padding-left: 26px; list-style: decimal-leading-zero; text-align: left; }
+.metodo-limites-lista { display: flex; flex-direction: column; }
+.metodo-limites-lista li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: var(--e3); padding: var(--e4) 0; border-bottom: 1px solid var(--linha); }
+.metodo-limites-lista li > div { display: flex; flex-direction: column; gap: 4px; max-width: 76ch; }
+.metodo-limites-lista p { line-height: 1.6; }
+.metodo-limite-num { font-family: var(--f-titulo); font-size: var(--t-num); line-height: 1; color: var(--controle); }
+
+@media (max-width: 1000px) {
+  .metodo-passos { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--e6); }
+  .metodo-passo:nth-child(odd)::before { display: none; }
+  .metodo-limites { grid-template-columns: 1fr; gap: var(--e5); }
+  .metodo-limites > .comprovante-sombra { position: static; justify-self: center; }
+}
+@media (max-width: 640px) {
+  .metodo-passos { grid-template-columns: 1fr; }
+  .metodo-passo + .metodo-passo::before { display: none; }
+  .metodo-passo-num { font-size: var(--t-num); }
+  .metodo-k { grid-template-columns: minmax(0, 1fr) 60px; gap: 4px var(--e3); }
+  .metodo-k-nome, .metodo-k-conc { grid-column: 1 / -1; }
+  .metodo-limites-lista li { grid-template-columns: 40px minmax(0, 1fr); }
+  .metodo-numeros { gap: var(--e6); }
+}
+.metodo-menor dd { white-space: nowrap; }
+.metodo-menor--medio { grid-column: span 2; }

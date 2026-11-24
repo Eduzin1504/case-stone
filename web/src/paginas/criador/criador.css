@@ -1,0 +1,48 @@
+/* /criadores/:id: perfil do criador */
+.criador-cab { display: flex; align-items: flex-start; gap: clamp(16px, 3vw, 40px); }
+.criador-avatar { flex: none; display: grid; place-items: center; width: clamp(64px, 8vw, 88px); aspect-ratio: 1; border-radius: 50%; background: var(--tinta); color: var(--sobre-tinta); font-family: var(--f-titulo); font-size: var(--t-num); line-height: 1; }
+.criador-id { display: flex; flex-direction: column; gap: var(--e3); min-width: 0; }
+.criador-nome { font-size: var(--t-h1); overflow-wrap: anywhere; }
+.criador-complemento { font-size: 1.0625rem; font-weight: 500; }
+.criador-linha { display: flex; flex-wrap: wrap; gap: 4px var(--e4); color: var(--texto-2); }
+.criador-linha b { color: var(--texto); font-weight: 600; }
+.criador-linha span::before { content: "·"; margin-right: var(--e4); }
+.criador-bio { max-width: 64ch; color: var(--texto-2); }
+
+.criador-numeros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--e5) clamp(24px, 5vw, 64px); padding-block: var(--e5); border-block: 2px solid var(--tinta); }
+.criador-num { display: flex; flex-direction: column; gap: 6px; font-size: var(--t-pequeno); color: var(--texto-2); }
+.criador-num-valor { font-size: var(--t-num); }
+.criador-num--chave { margin-left: auto; max-width: 44ch; }
+.criador-fora { font-size: var(--t-corpo); color: var(--texto-2); padding: var(--e3) var(--e4); background: var(--afundado); border-radius: var(--r-dado); }
+.criador-fora b { color: var(--texto); }
+
+.criador-tempo { position: relative; min-width: 0; }
+.criador-tempo svg { display: block; overflow: visible; }
+.criador-tempo-grade { stroke: var(--linha); stroke-width: 1; }
+.criador-tempo-eixo { fill: var(--texto-2); font-family: var(--f-mono); font-size: 11px; }
+.criador-tempo-eixo--forte { fill: var(--texto); }
+.criador-tempo-esperado { stroke: var(--texto); stroke-width: 1.5; stroke-dasharray: 5 4; transition: all var(--dur-dados) var(--ease); }
+.criador-tempo-ponto { fill: var(--controle); stroke: var(--superficie); stroke-width: 1.5; cursor: pointer; transition: opacity 0.4s var(--ease), r var(--dur) var(--ease); }
+.criador-tempo-ponto--top { fill: var(--lima); stroke: var(--floresta); stroke-width: 2; }
+.criador-tempo-fora { fill: none; stroke: var(--controle); stroke-width: 1.5; cursor: pointer; pointer-events: all; }
+.criador-tempo-dica { position: absolute; z-index: 2; display: flex; gap: var(--e3); width: 240px; padding: var(--e2); background: var(--superficie); border: 1px solid var(--linha); border-radius: 14px; box-shadow: var(--sombra-ficha); pointer-events: none; font-size: var(--t-pequeno); }
+.criador-tempo-dica-foto { flex: none; width: 54px; height: 72px; overflow: hidden; border-radius: 10px; background: var(--afundado); }
+.criador-tempo-dica-texto { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.criador-tempo-legenda { display: flex; flex-wrap: wrap; gap: 6px var(--e5); margin-top: var(--e3); }
+.criador-tempo-marca { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; background: var(--controle); }
+.criador-tempo-marca--top { background: var(--lima); box-shadow: 0 0 0 2px var(--floresta); }
+.criador-tempo-marca--fora { background: none; box-shadow: inset 0 0 0 1.5px var(--controle); }
+
+.criador-filtros .campo { min-width: 0; }
+.criador-grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2.4vw, 32px) clamp(8px, 1.8vw, 24px); max-width: 980px; }
+.criador-mais { margin-top: var(--e3); }
+
+@media (max-width: 640px) {
+  .criador-cab { gap: var(--e4); }
+  .criador-nome { font-size: var(--t-h1); }
+  .criador-num--chave { margin-left: 0; }
+  .criador-num-valor { font-size: var(--t-num); }
+}
+
+/* no perfil, o nome do criador em cada card é repetição */
+.criador-filtros { flex-wrap: nowrap; }

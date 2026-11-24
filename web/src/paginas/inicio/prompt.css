@@ -1,0 +1,41 @@
+/* Caixa de pergunta do Início: grande e centrada, com abas em cima. */
+
+.prompt { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: var(--e4); justify-content: center; min-height: calc(100vh - 164px); padding-block: 0 4vh; }
+@media (max-width: 900px) { .prompt { min-height: calc(100dvh - 180px); } }
+.prompt-titulo { font-size: var(--t-h1); text-align: center; }
+.prompt-sub { color: var(--texto-2); text-align: center; max-width: 56ch; margin-top: calc(-1 * var(--e2)); }
+
+.prompt-abas { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 2px; padding: 4px; background: var(--afundado); border-radius: 99px; }
+.prompt-aba { border: 0; background: transparent; border-radius: 99px; padding: 8px 16px; font: 500 0.9rem var(--f-corpo, inherit); color: var(--texto-2); cursor: pointer; transition: background 0.18s, color 0.18s; }
+.prompt-aba:hover { color: var(--tinta); }
+.prompt-aba[aria-selected="true"] { background: var(--superficie); color: var(--tinta); box-shadow: 0 1px 2px rgba(0, 40, 25, 0.12); }
+
+.prompt-caixa { width: 100%; display: flex; flex-direction: column; gap: var(--e3); padding: 18px 18px 12px; background: var(--superficie); border: 1.5px solid var(--linha); border-radius: 22px; transition: border-color 0.18s, box-shadow 0.18s; }
+.prompt-caixa:focus-within, .prompt-caixa--sobre { border-color: var(--tinta); box-shadow: 0 0 0 4px var(--lima-suave); }
+.prompt-caixa textarea { width: 100%; min-height: 96px; border: 0; outline: 0; resize: none; background: transparent; font: 400 1.15rem/1.45 var(--f-corpo, inherit); color: var(--texto); }
+.prompt-caixa textarea::placeholder { color: #75847b; }
+.prompt-rodape { display: flex; align-items: center; flex-wrap: wrap; gap: var(--e2) var(--e3); }
+.prompt-base { font-size: var(--t-pequeno); color: var(--texto-2); font-variant-numeric: tabular-nums; }
+.prompt-espaco { flex: 1; }
+.prompt-enviar { border: 0; border-radius: 99px; padding: 10px 20px; background: var(--tinta); color: var(--sobre-tinta); font: 600 0.9rem var(--f-corpo, inherit); cursor: pointer; }
+.prompt-enviar:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.prompt-anexo { display: flex; align-items: center; flex-wrap: wrap; gap: var(--e2) var(--e3); padding: 10px 12px; border: 1.5px dashed var(--linha); border-radius: 14px; font-size: var(--t-pequeno); color: var(--texto-2); }
+.prompt-anexo-botao { border: 0; background: var(--lima); color: var(--tinta); border-radius: 99px; padding: 6px 12px; font: 600 var(--t-pequeno) var(--f-corpo, inherit); cursor: pointer; }
+.prompt-anexo-tirar { border: 0; background: none; color: var(--tinta); text-decoration: underline; font: 500 var(--t-pequeno) var(--f-corpo, inherit); cursor: pointer; }
+
+.prompt-aviso { font-size: var(--t-pequeno); color: var(--magenta, #b02d63); }
+.prompt-sugestoes { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--e2); }
+.prompt-sugestao { border: 1px solid var(--linha); background: var(--superficie); border-radius: 99px; padding: 7px 14px; font: 400 0.86rem var(--f-corpo, inherit); color: var(--texto); cursor: pointer; text-align: left; }
+.prompt-sugestao:hover { border-color: var(--tinta); }
+
+.prompt button:focus-visible { outline: 3px solid var(--lima); outline-offset: 2px; }
+
+@media (max-width: 700px) {
+  .prompt-caixa textarea { font-size: 1.02rem; }
+  .prompt-aba { padding: 7px 12px; font-size: 0.84rem; }
+}
+@media (prefers-reduced-motion: reduce) { .prompt-aba, .prompt-caixa { transition: none; } }
+.prompt-caixa textarea:focus, .prompt-caixa textarea:focus-visible { outline: none; box-shadow: none; }
+.prompt-link { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; margin: 0 0 var(--e2); font-size: var(--t-pequeno); color: var(--texto-2); }
+.prompt-link-marca { padding: 3px 10px; border-radius: 99px; background: var(--lima); color: var(--tinta); font-weight: 600; }
