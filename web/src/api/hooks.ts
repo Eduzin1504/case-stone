@@ -128,6 +128,16 @@ export function useAgente(id: string | null | undefined) {
     refetchInterval: (q) => (q.state.data?.estado === "rodando" ? INTERVALO_JOB : false),
   });
 }
+/** POST /criativos/video: gera o Reels do criativo pela Feita. mutateAsync(criativo) → { id }. */
+export const useGerarVideo = () => useMutation({ mutationFn: (criativo: T.Criativo) => api.post<T.IdJob>("/criativos/video", { criativo }) });
+/** GET /criativos/video/{id}, repetindo enquanto roda. */
+export const useVideoCriativo = (id: string | null | undefined) =>
+  useQuery({
+    queryKey: ["/criativos/video", id],
+    queryFn: () => api.get<T.EstadoJob<{ url: string }>>(`/criativos/video/${id}`),
+    enabled: !!id,
+    refetchInterval: (q) => (q.state.data?.estado === "rodando" ? INTERVALO_JOB : false),
+  });
 /** GET /agente/opcoes: segmentos e pilares aceitos como filtro. */
 export const useOpcoesAgente = () => useQuery({ queryKey: ["/agente/opcoes"], queryFn: () => api.get<T.OpcoesAgente>("/agente/opcoes"), staleTime: Infinity });
 export const useAgenteSalvas = () => useApi<T.RespostaAgente[]>("/agente/salvas");

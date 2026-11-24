@@ -52,6 +52,8 @@ if SENHA := os.getenv("SITE_SENHA"):  # deploy público: o navegador pede a senh
             dada = base64.b64decode(req.headers.get("authorization", "")[6:]).decode().partition(":")[2]
         except Exception:
             dada = ""
+        if req.url.path.startswith("/mcp") and req.query_params.get("chave"):  # MCP: claude.ai não deixa pôr header
+            dada = req.query_params["chave"]
         if secrets.compare_digest(dada.encode(), SENHA.encode()):
             return await seguir(req)
         return Response("Senha necessária.", 401, {"WWW-Authenticate": 'Basic realm="Fora da Curva", charset="UTF-8"'})
@@ -308,6 +310,31 @@ def agente(corpo: dict):
     return {"id": trabalhos.criar(tarefa, tid)}
 
 
+@api.post("/criativos/video")
+def criativo_video(corpo: dict):
+    """Gera o Reels do criativo pela Feita (clipes b-roll + texto da marca). Cache por roteiro."""
+    criativo = corpo.get("criativo") or {}
+    if not str(criativo.get("roteiro") or "").strip():
+        raise HTTPException(400, "Criativo sem roteiro.")
+    import hashlib
+
+    import render_reels
+    nome = "reels_" + hashlib.sha1(criativo["roteiro"].encode()).hexdigest()[:12]
+    pronto = os.path.join(render_reels.SAIDA, f"{nome}.mp4")
+
+    def tarefa(diz):
+        if not os.path.exists(pronto):
+            render_reels.montar_criativo(criativo, nome, progresso=diz)
+        return {"url": f"/midia/render/{nome}.mp4"}
+
+    return {"id": trabalhos.criar(tarefa)}
+
+
+@api.get("/criativos/video/{id}")
+def criativo_video_estado(id: str):
+    return _trabalho(id)
+
+
 @api.get("/agente/opcoes")
 def agente_opcoes():
     return dados.opcoes_agente()
@@ -407,7 +434,8 @@ def api_sem_rota(resto: str):
 # ---------------------------------------------------------------- arquivos: mídia e o site compilado
 app.include_router(api)
 for url, pasta in [("/midia/a", dados.FOCOS["A"]["midia"]), ("/midia/b", dados.FOCOS["B"]["midia"]),
-                   ("/midia/thumbs", dados.THUMBS), ("/midia/avaliacoes", guardado.pasta_avaliacoes())]:
+                   ("/midia/thumbs", dados.THUMBS), ("/midia/avaliacoes", guardado.pasta_avaliacoes()),
+                   ("/midia/render", os.path.join(dados.DATA, "render", "feita"))]:
     os.makedirs(pasta, exist_ok=True) if "avaliacoes" in url else None
     app.mount(url, StaticFiles(directory=pasta, check_dir=False))
 

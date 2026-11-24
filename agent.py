@@ -203,8 +203,13 @@ def no_recuperar(s):
 
 
 def no_redigir(s):
+    return {"redacao": P.llm(prompt_redacao(s), Redacao, model=REDATOR), "tentativas": s["tentativas"] + 1, "feedback": ""}
+
+
+def prompt_redacao(s):
+    """Prompt completo do redator a partir do estado recuperado (usado aqui e no MCP, onde quem redige é o cliente)."""
     e = s["entrada"]
-    prompt = f"""Você é estrategista de conteúdo do Impulso Stone (@impulsostone), o braço social do Instituto Stone
+    return f"""Você é estrategista de conteúdo do Impulso Stone (@impulsostone), o braço social do Instituto Stone
 que capacita micro e pequenos empreendedores (público: 70% mulheres, 35-54 anos; 94% das views vêm de não seguidores).
 Tom de voz: próximo, acolhedor, educativo, sem jargão. Objetivo dos posts: o empreendedor participar e se inscrever no Impulso.
 Pilares editoriais: educação financeira, gestão e vendas, histórias reais, especialistas, comunidade.
@@ -226,7 +231,6 @@ Achados (freq no top vs. no resto; lift > 1 = mais comum entre os de alto desemp
 Publicações de referência:
 {json.dumps([r.model_dump() for r in s["refs"]], ensure_ascii=False, default=str)}
 {("Correção pedida na versão anterior: " + s["feedback"]) if s.get("feedback") else ""}"""
-    return {"redacao": P.llm(prompt, Redacao, model=REDATOR), "tentativas": s["tentativas"] + 1, "feedback": ""}
 
 
 def no_checar(s):

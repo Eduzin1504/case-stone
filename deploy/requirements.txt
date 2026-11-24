@@ -14,3 +14,4 @@ langgraph==1.2.24
 faster-whisper==1.2.1
 pillow==13.0.0
 yt-dlp
+mcp==2.3.0

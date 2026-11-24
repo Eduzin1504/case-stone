@@ -105,7 +105,7 @@ def partes_google(content):
     return out
 
 
-GEMINI_KEYS = [k for k in (os.getenv("GEMINI_API_KEY"), os.getenv("GEMINI_API_KEY_2"), os.getenv("GEMINI_API_KEY_3")) if k]
+GEMINI_KEYS = [k for k in (os.getenv("GEMINI_API_KEY"), *(os.getenv(f"GEMINI_API_KEY_{i}") for i in range(2, 10))) if k]
 _chave = 0  # índice da chave em uso; avança quando a cota diária da atual acaba
 
 
@@ -113,7 +113,7 @@ def llm_google(content, schema, model, tentativas=3):
     global _google
     from google import genai
     from google.genai import errors, types
-    _google = _google or genai.Client(api_key=GEMINI_KEYS[_chave])  # GEMINI_API_KEY (e _2) do .env
+    _google = _google or genai.Client(api_key=GEMINI_KEYS[_chave], http_options={"timeout": 180_000})  # sem timeout, um 504 pendura a rodada
     cfg = types.GenerateContentConfig(response_mime_type="application/json", response_schema=schema, temperature=0,
                                       media_resolution=types.MediaResolution.MEDIA_RESOLUTION_LOW)
     partes = partes_google(content)
@@ -124,7 +124,7 @@ def llm_google(content, schema, model, tentativas=3):
                 raise ValueError(f"resposta fora do schema: {(r.text or '')[:200]}")
             return r.parsed
         except errors.APIError as e:
-            if e.code in (429, 500, 503) and t < tentativas - 1:
+            if e.code in (429, 500, 503) and t < tentativas - 1 and "per day" not in str(e).lower():  # cota diária: não adianta esperar
                 time.sleep(min(60, 5 * 2 ** t))
                 continue
             raise
@@ -426,12 +426,8 @@ def collect(_):
           f"{df.channel_id.nunique()} canais. Coletado em {agora:%Y-%m-%d %H:%M} UTC")
 
 
-def ig_collect(a):
-    """Posts dos perfis IG incluídos -> mesmas tabelas do YouTube (plataforma=instagram)."""
-    perfis = pd.read_csv(f"{DATA}/perfis_ig.csv")
-    perfis = perfis[perfis.incluir == 1]
-    itens = apify("posts", directUrls=[f"https://www.instagram.com/{u}/" for u in perfis.id],
-                  resultsType="posts", resultsLimit=a.por_perfil, onlyPostsNewerThan=f"{JANELA_DIAS} days")
+def posts_ig(itens):
+    """Itens de posts da Apify -> linhas da tabela videos (plataforma=instagram)."""
     agora = datetime.now(timezone.utc)
     rows = []
     for p in itens:
@@ -449,6 +445,16 @@ def ig_collect(a):
             imagens=",".join(c.get("displayUrl", "") for c in p.get("childPosts") or []),
         ))
     df = pd.DataFrame(rows).drop_duplicates("video_id")
+    return df
+
+
+def ig_collect(a):
+    """Posts dos perfis IG incluídos -> mesmas tabelas do YouTube (plataforma=instagram)."""
+    perfis = pd.read_csv(f"{DATA}/perfis_ig.csv")
+    perfis = perfis[perfis.incluir == 1]
+    itens = apify("posts", directUrls=[f"https://www.instagram.com/{u}/" for u in perfis.id],
+                  resultsType="posts", resultsLimit=a.por_perfil, onlyPostsNewerThan=f"{JANELA_DIAS} days")
+    df = posts_ig(itens)
     total = len(df)
     df = df[df.channel_id.isin(perfis.id)]  # collabs trazem outro dono, sem seguidores conhecidos
     df = df[df.idade_dias.between(MIN_IDADE_DIAS, JANELA_DIAS) & ~df.fixado]
@@ -729,6 +735,26 @@ def categoriza_um(r, so_thumb=False):
 N1_MODEL = "deepseek/deepseek-v4.1-flash-1017"  # crédito da Feita restrito a ele; só lê imagem + texto
 
 
+def categoriza_quadros(r):
+    """Reel com mp4 local: DeepSeek vê 12 quadros (6 no gancho) + a transcrição do áudio (Whisper), mesmo método do
+    Foco B. Sem mp4 (carrossel/imagem): DeepSeek vê as imagens + legenda. Completa o que a cota do Gemini não cobre."""
+    import avaliar as A
+    import transcrever as T
+    mp4 = f"{DATA}/midia/{r.video_id}.mp4"
+    if not os.path.exists(mp4):
+        return llm(conteudo_ig(r, so_imagens=True)[0][-11:], Rubrica, model=N1_MODEL), "imagens_deepseek"
+    qs, dur = A.quadros(open(mp4, "rb").read())
+    segs = T.cache().get(r.video_id)
+    if segs is None:
+        segs = T.segmentos(mp4)
+    texto = PROMPT.format(titulo=f"post de @{r.channel_id} ({r.tipo})", descricao=r.descricao[:1500]) + (
+        f"\nO vídeo tem {dur:.0f} s; seguem {len(qs)} quadros em ordem, os marcados (gancho) são dos 3 primeiros segundos.\n"
+        + T.para_prompt(segs))
+    imgs = [x for t, q in qs for x in ({"type": "text", "text": f"Quadro em {t:.1f} s" + (" (gancho)" if t <= 3 else "")},
+                                       {"type": "image_url", "image_url": {"url": A.data_url(q)}})]
+    return llm(imgs + [{"type": "text", "text": texto}], Rubrica, model=N1_MODEL), "quadros_audio_deepseek"
+
+
 def categorize(a):
     """metodo video: Gemini vê o vídeo (tabela categorias). metodo n1: DeepSeek vê thumbnail + título + descrição
     (tabela categorias_n1, separada, para medir o impacto do método). metodo deepseek: igual ao n1, mas grava na
@@ -749,6 +775,8 @@ def categorize(a):
     from concurrent.futures import ThreadPoolExecutor, as_completed
     with ThreadPoolExecutor(a.paralelo) as ex:
         def um(r):
+            if a.metodo == "quadros":
+                return categoriza_quadros(r)
             if a.metodo != "video" and r.plataforma == "instagram":  # provisório: sem o vídeo do Reel, só capa + legenda
                 return llm(conteudo_ig(r, so_imagens=True)[0][-5:], Rubrica, model=N1_MODEL), "imagens_deepseek"
             if a.metodo != "video":
@@ -982,7 +1010,7 @@ if __name__ == "__main__":
     sub.add_parser("triagem").add_argument("arquivo", nargs="?", default=f"{DATA}/canais.csv")
     c = sub.add_parser("categorize")
     c.add_argument("--limite", type=int, default=100_000)
-    c.add_argument("--metodo", choices=["video", "n1", "deepseek"], default="video")
+    c.add_argument("--metodo", choices=["video", "n1", "deepseek", "quadros"], default="video")
     c.add_argument("--paralelo", type=int, default=18)  # Feita: no máx. 20 simultâneas por chave
     c.add_argument("--plataforma", choices=["youtube", "instagram"])
     c.add_argument("--so-thumb", action="store_true", help="não manda o vídeo, só thumbnail + texto")

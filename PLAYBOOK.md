@@ -43,13 +43,13 @@ Base: **655 posts de 28 perfis no Instagram** (top 10% vs. controle, 92 analisad
 |---|---|---|---|---|---|
 | Geral | Gatilho: **pessoa_real** | 1,88× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
 | Geral | Convite à participação: **sim** | 1,44× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
-| Geral | Gatilho: **nenhum** | 1,97× | mais comum nos Ads de baixo CTR | **contradito** | média (κ 0,41) |
+| Geral | Gatilho: **nenhum** | 1,88× | mais comum nos Ads de baixo CTR | **contradito** | média (κ 0,41) |
 | YouTube | Gatilho: **pessoa_real** | 3,80× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
 | YouTube | Convite à participação: **sim** | 1,38× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
 | Instagram | Gatilho: **pessoa_real** | 1,50× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
 | Instagram | Convite à participação: **sim** | 1,48× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
 
-**O insight central é que reação não é clique.** No mercado, medido por curtidas e comentários, o post genérico não é penalizado: aparece no top na mesma proporção que nos comuns (lift 1,01), e o post sem gatilho de identificação aparece até mais (lift 1,97, 9 posts). Nos Ads do Impulso, os posts genéricos e motivacionais ficam abaixo de 1% de CTR ("Vender mais não é sorte", 0,77%; "POV", 0,97%). Para gerar inscrição, o post precisa de identificação (nicho, data ou dor) e de um próximo passo claro.
+**O insight central é que reação não é clique.** No mercado, medido por curtidas e comentários, o post genérico não é penalizado: aparece no top na mesma proporção que nos comuns (lift 1,01), e o post sem gatilho de identificação aparece até mais (lift 1,88, 8 posts). Nos Ads do Impulso, os posts genéricos e motivacionais ficam abaixo de 1% de CTR ("Vender mais não é sorte", 0,77%; "POV", 0,97%). Para gerar inscrição, o post precisa de identificação (nicho, data ou dor) e de um próximo passo claro.
 
 **Convite à participação.** É o padrão confirmado. Os posts que chamam o empreendedor para participar têm os maiores CTRs da conta, acima de 8%. Mas na validação manual a IA foi mais restritiva que a revisão humana (κ −0,20: em 5 de 10 posts a revisão humana viu convite e a IA não). O sinal dos Ads é forte, mas a medida no mercado ainda não é confiável. **É a primeira hipótese a testar no piloto de Ads.**
 
@@ -70,7 +70,7 @@ Indiânara Cörrêa, parceira do Impulso, entra no top com 1,3 mil seguidores. I
 
 Maiores lifts da amostra atual (70 de 332 posts vistos em vídeo pelo Gemini; o restante por thumbnail, título e descrição, pelo DeepSeek). A comparação entre os dois métodos foi feita na amostra da régua anterior e não cobre esta:
 
-- Pilar = **comunidade**: lift 6,0× (6 posts no top)
+- Pilar = **comunidade**: lift 5,0× (5 posts no top)
 - Segmento do perfil = **alimentação**: lift 4,0× (12 posts no top)
 - Gatilho = **pessoa_real**: lift 3,8× (19 posts no top)
 - Formato = **bastidores**: lift 2,9× (20 posts no top)

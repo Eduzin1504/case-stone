@@ -1,5 +1,6 @@
 // A resposta do agente: storyboard da pauta (modo gerar) e/ou explicação com achados e referências (analisar, recomendar).
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useGerarVideo, useVideoCriativo } from "../../api/hooks";
 import type { Criativo, PostResumo, RespostaAgente } from "../../api/tipos";
 import { BarraPar, Botao, BotaoColecao, BotaoExportar, Comprovante, Etiqueta, LegendaBarraPar, Markdown, PostCard, Secao, Seg } from "../../componentes";
 import { useFoco } from "../../contexto/Foco";
@@ -70,6 +71,33 @@ function Storyboard({ c }: { c: Criativo }) {
   );
 }
 
+function VideoCriativo({ c }: { c: Criativo }) {
+  // gera a peça pronta: clipes b-roll pela Feita + texto das cenas no template da marca
+  const gerar = useGerarVideo();
+  const [id, setId] = useState<string | null>(null);
+  const { data: job } = useVideoCriativo(id);
+  const url = job?.resultado?.url;
+  if (url)
+    return (
+      <div className="criar-video">
+        <video src={url} controls playsInline className="criar-video-player" aria-label="Reels gerado a partir do roteiro" />
+        <a className="botao botao--contorno botao--p" href={url} download>Baixar MP4</a>
+      </div>
+    );
+  const rodando = gerar.isPending || job?.estado === "rodando";
+  const erro = gerar.error?.message ?? (job?.estado === "erro" ? job.erro : null);
+  return (
+    <div className="criar-video nao-imprimir" data-nao-exportar>
+      <Botao variante="contorno" tamanho="p" disabled={rodando} onClick={() => gerar.mutateAsync(c).then((r) => setId(r.id))}>
+        {rodando ? "Gerando o Reels…" : "Gerar o Reels com IA"}
+      </Botao>
+      <span className="t-pequeno t-sec" role="status">
+        {rodando ? (job?.etapas.at(-1) ?? "Enviando o roteiro") + "… (uns 10 minutos)" : erro ?? "Clipes sem rosto pela Feita + texto das cenas no template da marca."}
+      </span>
+    </div>
+  );
+}
+
 function Legenda({ texto }: { texto: string }) {
   const [estado, setEstado] = useState<"" | "ok" | "falhou">("");
   const copiar = async () => {
@@ -131,6 +159,7 @@ function Pauta({ r }: { r: RespostaAgente }) {
       <div ref={alvo} className="criar-exporta" key={i}>
         <p className="criar-formato"><b>{c.formato}</b><span className="t-sec"> · pilar: {c.pilar}</span></p>
         <Storyboard c={c} />
+        {tipoCurto(c.formato) === "Reels" && <VideoCriativo c={c} />}
         <div className="criar-abaixo">
           <div className="criar-textos">
             <div className="criar-cta">

@@ -10,4 +10,4 @@ USER user
 WORKDIR /app
 ENV WHISPER_MODELO=base WHISPER_THREADS=1
 EXPOSE 7860
-CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "servir:app", "--host", "0.0.0.0", "--port", "7860"]
