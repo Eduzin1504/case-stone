@@ -1,7 +1,7 @@
 # Playbook de conteúdo · Impulso Stone
 
 Padrões de conteúdo de alto engajamento para micro e pequenos empreendedores, cruzados com os Ads do Impulso.
-Base: **655 posts de 28 perfis no Instagram** (top 10% vs. controle, 92 analisados pelo Gemini vendo vídeo e imagens) e **11.021 Shorts de 100 canais no YouTube** (evidência complementar). Coleta em 23/11/2026.
+Base: **655 posts de 28 perfis no Instagram** (top 10% vs. controle, 230 analisados pelo Gemini vendo vídeo e imagens) e **11.021 Shorts de 100 canais no YouTube** (evidência complementar). Coleta em 23/11/2026.
 
 ## Como ler este playbook
 
@@ -13,43 +13,45 @@ Base: **655 posts de 28 perfis no Instagram** (top 10% vs. controle, 92 analisad
 
 | Padrão | No top | Nos comuns | Lift | Confiança |
 |---|---|---|---|---|
-| Segmento do perfil: **finanças e contabilidade** | 13% | 2% | 5,7× | dado objetivo |
-| Tema: **finanças** | 19% | 4% | 4,3× | média (κ 0,53) |
-| Tipo de CTA: **seguir** | 17% | 7% | 2,5× | não validado |
-| Rosto: **não** | 17% | 7% | 2,5× | não validado |
-| Gancho: **promessa** | 21% | 9% | 2,4× | baixa (κ 0,04) |
-| tipo_post: **imagem** | 11% | 4% | 2,4× | dado objetivo |
-| Tema: **história de empreendedor** | 21% | 11% | 1,9× | média (κ 0,53) |
-| Formato: **carrossel/estático** | 47% | 27% | 1,8× | média (κ 0,46) |
-| usa_linguagem_regional: **sim** | 11% | 7% | 1,6× | não validado |
-| Tom: **técnico** | 11% | 7% | 1,6× | não validado |
+| Segmento do perfil: **finanças e contabilidade** | 5% | 1% | 6,1× | dado objetivo |
+| Formato: **humor/esquete** | 9% | 4% | 2,5× | média (κ 0,46) |
+| Tipo de CTA: **seguir** | 12% | 5% | 2,2× | não validado |
+| usa_linguagem_regional: **sim** | 9% | 4% | 2,0× | não validado |
+| Gatilho: **pessoa_real** | 38% | 19% | 1,9× | média (κ 0,41) |
+| Gatilho: **nenhum** | 6% | 4% | 1,8× | média (κ 0,41) |
+| Tema: **história de empreendedor** | 23% | 13% | 1,8× | média (κ 0,53) |
+| Gancho: **número** | 11% | 6% | 1,7× | baixa (κ 0,04) |
+| Pilar: **histórias reais** | 36% | 22% | 1,6× | baixa (κ 0,22) |
+| Tom: **inspiracional** | 45% | 29% | 1,5× | não validado |
 
 **O que aparece menos no top:**
 
-- Tema = vendas: 11% no top contra 22% nos comuns (lift 0,48)
-- Duração = 30-60s: 13% no top contra 20% nos comuns (lift 0,64)
-- Formato = talking head: 30% no top contra 47% nos comuns (lift 0,64)
-- oferta_ou_beneficio_explicito = sim: 30% no top contra 47% nos comuns (lift 0,64)
+- Segmento do perfil = pagamentos_maquininha: 5% no top contra 11% nos comuns (lift 0,47)
+- Formato = bastidores: 6% no top contra 12% nos comuns (lift 0,51)
+- Gatilho = nicho: 10% no top contra 18% nos comuns (lift 0,56)
+- Gancho = pergunta: 8% no top contra 14% nos comuns (lift 0,57)
+- Pilar = comunidade: 7% no top contra 12% nos comuns (lift 0,58)
+- oferta_ou_beneficio_explicito = sim: 26% no top contra 41% nos comuns (lift 0,63)
 
 **Leitura para o Impulso:**
 
 - Finanças e gestão explicadas na prática, em tutorial ou carrossel que dá para salvar, são o eixo mais forte do top. Isso conversa direto com o pilar **educação financeira**.
-- Post sem CTA aparece um pouco menos no top (28% contra 33%, lift 0,83). A confiança do campo CTA é alta (κ 0,60).
+- Post sem CTA aparece não menos no top (48% contra 43%, lift 1,12). A confiança do campo CTA é alta (κ 0,60).
 - "Vendas" genérico e o talking head puro aparecem menos no top. O que se destaca é ensinar uma conta ou um processo concreto.
 
 ## 2. Mercado × Ads do Impulso (evidência dupla)
 
 | Onde | Padrão | Mercado (lift) | Ads do Impulso | Selo | Confiança |
 |---|---|---|---|---|---|
-| Geral | Gatilho: **pessoa_real** | 1,88× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
-| Geral | Convite à participação: **sim** | 1,44× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
-| Geral | Gatilho: **nenhum** | 1,88× | mais comum nos Ads de baixo CTR | **contradito** | média (κ 0,41) |
-| YouTube | Gatilho: **pessoa_real** | 3,80× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
-| YouTube | Convite à participação: **sim** | 1,38× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
-| Instagram | Gatilho: **pessoa_real** | 1,50× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
-| Instagram | Convite à participação: **sim** | 1,48× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
+| Geral | Gatilho: **pessoa_real** | 2,22× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
+| Geral | Gatilho: **nenhum** | 0,79× | mais comum nos Ads de baixo CTR | **confirmado** | média (κ 0,41) |
+| YouTube | Gatilho: **pessoa_real** | 4,00× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
+| YouTube | Convite à participação: **sim** | 1,33× | mais comum nos Ads de alto CTR | **confirmado** | baixa (κ -0,20) |
+| Instagram | Gatilho: **pessoa_real** | 1,94× | mais comum nos Ads de alto CTR | **confirmado** | média (κ 0,41) |
+| Instagram | Gatilho: **nenhum** | 1,78× | mais comum nos Ads de baixo CTR | **contradito** | média (κ 0,41) |
+| Instagram | Gatilho: **nicho** | 0,56× | mais comum nos Ads de alto CTR | **contradito** | média (κ 0,41) |
 
-**O insight central é que reação não é clique.** No mercado, medido por curtidas e comentários, o post genérico não é penalizado: aparece no top na mesma proporção que nos comuns (lift 1,01), e o post sem gatilho de identificação aparece até mais (lift 1,88, 8 posts). Nos Ads do Impulso, os posts genéricos e motivacionais ficam abaixo de 1% de CTR ("Vender mais não é sorte", 0,77%; "POV", 0,97%). Para gerar inscrição, o post precisa de identificação (nicho, data ou dor) e de um próximo passo claro.
+**O insight central é que reação não é clique.** No mercado, medido por curtidas e comentários, o post genérico não é penalizado: aparece no top na mesma proporção que nos comuns (lift 1,09), e o post sem gatilho de identificação aparece até mais (lift 0,79, 10 posts). Nos Ads do Impulso, os posts genéricos e motivacionais ficam abaixo de 1% de CTR ("Vender mais não é sorte", 0,77%; "POV", 0,97%). Para gerar inscrição, o post precisa de identificação (nicho, data ou dor) e de um próximo passo claro.
 
 **Convite à participação.** É o padrão confirmado. Os posts que chamam o empreendedor para participar têm os maiores CTRs da conta, acima de 8%. Mas na validação manual a IA foi mais restritiva que a revisão humana (κ −0,20: em 5 de 10 posts a revisão humana viu convite e a IA não). O sinal dos Ads é forte, mas a medida no mercado ainda não é confiável. **É a primeira hipótese a testar no piloto de Ads.**
 
@@ -59,10 +61,10 @@ Base: **655 posts de 28 perfis no Instagram** (top 10% vs. controle, 92 analisad
 |---|---|---|---|---|---|
 | Poliana Lira | medio | 3 | finanças | carrossel/estático | especialistas |
 | Amanda Cichineli | medio | 3 | marketing | tutorial | especialistas |
-| Indiânara Cörrêa | micro | 1 | história de empreendedor | carrossel/estático | histórias reais |
-| Alex do Pano | grande | 2 | gestão | bastidores | histórias reais |
-| João Paulo | grande | 2 | história de empreendedor | antes/depois | histórias reais |
-| Dhuany Souza | medio | 3 | gestão | carrossel/estático | especialistas |
+| Daniel Macedo | micro | 3 | finanças | carrossel/estático | especialistas |
+| Naldo Muniz | micro | 1 | história de empreendedor | bastidores | histórias reais |
+| Lucas Matheus - Consultor Ton | micro | 3 | ferramentas/maquininha | humor/esquete | gestão e vendas |
+| Douglas Dedoné l Saúde e Negócios | micro | 1 | gestão | talking head | gestão e vendas |
 
 Indiânara Cörrêa, parceira do Impulso, entra no top com 1,3 mil seguidores. Isso confirma que microcriadoras com história real performam acima do seu tamanho.
 
@@ -71,11 +73,11 @@ Indiânara Cörrêa, parceira do Impulso, entra no top com 1,3 mil seguidores. I
 Maiores lifts da amostra atual (70 de 332 posts vistos em vídeo pelo Gemini; o restante por thumbnail, título e descrição, pelo DeepSeek). A comparação entre os dois métodos foi feita na amostra da régua anterior e não cobre esta:
 
 - Pilar = **comunidade**: lift 5,0× (5 posts no top)
+- Gatilho = **pessoa_real**: lift 4,0× (20 posts no top)
 - Segmento do perfil = **alimentação**: lift 4,0× (12 posts no top)
-- Gatilho = **pessoa_real**: lift 3,8× (19 posts no top)
 - Formato = **bastidores**: lift 2,9× (20 posts no top)
-- Pilar = **gestão e vendas**: lift 2,0× (26 posts no top)
-- usa_linguagem_regional = **sim**: lift 2,0× (6 posts no top)
+- Tema = **história de empreendedor**: lift 2,0× (14 posts no top)
+- Gancho = **polêmica**: lift 2,0× (20 posts no top)
 
 No YouTube, **bastidores** (mostrar o negócio por dentro) é o formato que mais se destaca.
 
