@@ -50,6 +50,7 @@ export default function App() {
           <Route path="/avaliar" element={<Avaliar />} />
           <Route path="/avaliar/historico" element={<Avaliar />} />
           <Route path="/criar" element={<Criar />} />
+          <Route path="/criar/historico" element={<Criar />} />
           <Route path="/colecoes" element={<Colecoes />} />
           <Route path="/colecoes/:id" element={<Colecoes />} />
           <Route path="/playbook" element={<Playbook />} />

@@ -1,7 +1,7 @@
 // /criar: o agente. Três modos, respostas salvas (sem rede) ou pergunta nova (trabalho em segundo plano, ?job=ID).
 // ?pergunta=… chega pré-preenchido (vindo de uma coleção).
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useAgente, useAgenteSalvas, useOpcoesAgente, usePerguntarAgente, useVideosGerados } from "../../api/hooks";
 import { ErroApi } from "../../api/cliente";
 import type { ModoAgente, RespostaAgente } from "../../api/tipos";
@@ -69,37 +69,42 @@ function Salvas({ modo, aoPerguntar }: { modo: ModoAgente; aoPerguntar: () => vo
   );
 }
 
-function VideosGerados() {
-  const { data } = useVideosGerados();
-  const [q, setQ] = useSearchParams();
-  if (!data?.length) return null;
-  const abrir = (id: string) => {
-    const n = new URLSearchParams(q);
-    n.set("salva", id);
-    n.delete("job");
-    setQ(n);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+function HistoricoReels() {
+  const { data, isLoading, error, refetch } = useVideosGerados();
   return (
-    <section className="criar-videos" aria-label="Reels já gerados">
-      <h2 className="t-h3">Reels já gerados</h2>
-      <ul className="criar-videos-lista">
-        {data.map((v) => (
-          <li key={v.url} className="criar-videos-item">
-            <video src={v.url} controls playsInline preload="metadata" className="criar-video-player" />
-            <p className="corta-3">{v.titulo}</p>
-            <span className="linha">
-              {v.id && <Botao variante="contorno" tamanho="p" onClick={() => abrir(v.id!)}>Abrir a pauta completa</Botao>}
-              <a className="botao botao--fantasma botao--p" href={v.url} download>Baixar MP4</a>
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <TituloPagina
+        titulo="Histórico" grifo="dos Reels"
+        sub="Cada vídeo gerado pela IA, com a pauta que o originou. Clique para reabrir a análise completa."
+        acoes={<Botao para="/criar">Criar pauta</Botao>}
+      />
+      {isLoading && <Esqueleto tipo="linhas" n={3} />}
+      {error && <Erro erro={error} onTentar={refetch} />}
+      {data && data.length === 0 && (
+        <Vazio titulo="Nenhum Reels gerado ainda" acao={<Botao para="/criar">Criar pauta</Botao>}>
+          Gere uma pauta em formato Reels e clique em “Gerar o Reels com IA”. O vídeo fica guardado aqui.
+        </Vazio>
+      )}
+      {!!data?.length && (
+        <ul className="criar-videos-lista">
+          {data.map((v) => (
+            <li key={v.url} className="criar-videos-item">
+              <video src={v.url} controls playsInline preload="metadata" className="criar-video-player" />
+              <p className="corta-3">{v.titulo}</p>
+              {v.em && <p className="t-pequeno t-sec">{fmtData(v.em)}</p>}
+              <span className="linha">
+                {v.id && <Botao variante="contorno" tamanho="p" para={`/criar?salva=${v.id}`}>Abrir a pauta completa</Botao>}
+                <a className="botao botao--fantasma botao--p" href={v.url} download>Baixar MP4</a>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }
 
-export default function Criar() {
+function Criar() {
   const { foco } = useFoco();
   const [q, setQ] = useSearchParams();
   const job = q.get("job");
@@ -156,6 +161,7 @@ export default function Criar() {
       <TituloPagina
         titulo="Criar" grifo="pauta"
         sub="Um agente que só escreve a partir de posts reais da base e confere o que escreveu antes de entregar."
+        acoes={<Botao variante="contorno" para="/criar/historico">Histórico dos Reels →</Botao>}
       />
       {foco === "B" && (
         <p className="criar-aviso" role="note">
@@ -220,7 +226,12 @@ export default function Criar() {
           )}
         </>
       )}
-      <VideosGerados />
     </>
   );
+}
+
+// /criar (agente) e /criar/historico (os Reels gerados, como no avaliar)
+export default function CriarPagina() {
+  const { pathname } = useLocation();
+  return pathname.replace(/\/$/, "").endsWith("/historico") ? <HistoricoReels /> : <Criar />;
 }
