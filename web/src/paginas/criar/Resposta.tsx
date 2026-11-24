@@ -90,10 +90,10 @@ function VideoCriativo({ c }: { c: Criativo }) {
   const erro = gerar.error?.message ?? (job?.estado === "erro" ? job.erro : null);
   return (
     <div className="criar-video nao-imprimir" data-nao-exportar>
-      <Botao variante="contorno" tamanho="p" disabled={rodando} onClick={() => gerar.mutateAsync(c).then((r) => setId(r.id))}>
+      <Botao variante="primario" tamanho="g" disabled={rodando} onClick={() => gerar.mutateAsync(c).then((r) => setId(r.id))}>
         {rodando ? "Gerando o Reels…" : "Gerar o Reels com IA"}
       </Botao>
-      <span className="t-pequeno t-sec" role="status">
+      <span className="t-sec" role="status">
         {rodando ? (job?.etapas.at(-1) ?? "Enviando o roteiro") + "… (uns 10 minutos)" : erro ?? "Clipes sem rosto pela Feita + texto das cenas no template da marca."}
       </span>
     </div>
@@ -160,8 +160,8 @@ function Pauta({ r }: { r: RespostaAgente }) {
       </div>
       <div ref={alvo} className="criar-exporta" key={i}>
         <p className="criar-formato"><b>{c.formato}</b><span className="t-sec"> · pilar: {c.pilar}</span></p>
-        <Storyboard c={c} />
         {tipoCurto(c.formato) === "Reels" && <VideoCriativo c={c} />}
+        <Storyboard c={c} />
         <div className="criar-abaixo">
           <div className="criar-textos">
             <div className="criar-cta">
