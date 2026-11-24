@@ -138,6 +138,9 @@ export const useVideoCriativo = (id: string | null | undefined) =>
     enabled: !!id,
     refetchInterval: (q) => (q.state.data?.estado === "rodando" ? INTERVALO_JOB : false),
   });
+/** GET /criativos/videos: histórico dos Reels já gerados. */
+export const useVideosGerados = () =>
+  useQuery({ queryKey: ["/criativos/videos"], queryFn: () => api.get<{ url: string; titulo: string; em: string | null; gancho: string }[]>("/criativos/videos") });
 /** GET /agente/opcoes: segmentos e pilares aceitos como filtro. */
 export const useOpcoesAgente = () => useQuery({ queryKey: ["/agente/opcoes"], queryFn: () => api.get<T.OpcoesAgente>("/agente/opcoes"), staleTime: Infinity });
 export const useAgenteSalvas = () => useApi<T.RespostaAgente[]>("/agente/salvas");

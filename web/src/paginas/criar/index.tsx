@@ -2,7 +2,7 @@
 // ?pergunta=… chega pré-preenchido (vindo de uma coleção).
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAgente, useAgenteSalvas, useOpcoesAgente, usePerguntarAgente } from "../../api/hooks";
+import { useAgente, useAgenteSalvas, useOpcoesAgente, usePerguntarAgente, useVideosGerados } from "../../api/hooks";
 import { ErroApi } from "../../api/cliente";
 import type { ModoAgente, RespostaAgente } from "../../api/tipos";
 import { Botao, Campo, Erro, Esqueleto, Seg, Seletor, TituloPagina, Vazio } from "../../componentes";
@@ -62,6 +62,25 @@ function Salvas({ modo, aoPerguntar }: { modo: ModoAgente; aoPerguntar: () => vo
       <h2 className="criar-pergunta t-titulo t-h2">{atual.pergunta}</h2>
       <Resposta key={atual.id} r={atual} />
     </>
+  );
+}
+
+function VideosGerados() {
+  const { data } = useVideosGerados();
+  if (!data?.length) return null;
+  return (
+    <section className="criar-videos" aria-label="Reels já gerados">
+      <h2 className="t-h3">Reels já gerados</h2>
+      <ul className="criar-videos-lista">
+        {data.map((v) => (
+          <li key={v.url} className="criar-videos-item">
+            <video src={v.url} controls playsInline preload="metadata" className="criar-video-player" />
+            <p className="corta-3">{v.titulo}</p>
+            <a className="botao botao--fantasma botao--p" href={v.url} download>Baixar MP4</a>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -183,6 +202,7 @@ export default function Criar() {
           )}
         </>
       )}
+      <VideosGerados />
     </>
   );
 }

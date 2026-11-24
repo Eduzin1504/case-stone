@@ -335,6 +335,26 @@ def criativo_video_estado(id: str):
     return _trabalho(id)
 
 
+@api.get("/criativos/videos")
+def criativos_videos():
+    """Histórico dos Reels já gerados: casa os MP4 em data/render/feita com as pautas (playbook + salvas)."""
+    import hashlib
+
+    import render_reels
+    vistos, saida = set(), []
+    for r in (dados.criativos() or []) + (dados.salvas() or []):
+        for c in r.get("criativos") or r.get("creatives") or []:
+            if not c.get("roteiro"):
+                continue
+            nome = "reels_" + hashlib.sha1(c["roteiro"].encode()).hexdigest()[:12]
+            arq = os.path.join(render_reels.SAIDA, f"{nome}.mp4")
+            if nome not in vistos and os.path.exists(arq):
+                vistos.add(nome)
+                saida.append(dict(url=f"/midia/render/{nome}.mp4", titulo=r.get("pergunta") or r.get("pedido") or c.get("gancho", "")[:80],
+                                  em=r.get("em"), gancho=c.get("gancho")))
+    return saida
+
+
 @api.get("/agente/opcoes")
 def agente_opcoes():
     return dados.opcoes_agente()

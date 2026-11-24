@@ -81,3 +81,6 @@
 /* Reels gerado pela Feita a partir do roteiro */
 .criar-video { display: flex; align-items: center; gap: var(--e3); flex-wrap: wrap; margin-top: var(--e3); }
 .criar-video-player { width: 232px; max-height: 47vh; border-radius: var(--raio-m, 12px); background: #000; }
+.criar-videos { margin-top: var(--e5); }
+.criar-videos-lista { display: flex; gap: var(--e4); flex-wrap: wrap; list-style: none; padding: 0; }
+.criar-videos-item { display: flex; flex-direction: column; gap: var(--e2); max-width: 232px; }
